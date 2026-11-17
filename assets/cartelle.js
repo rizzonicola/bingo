@@ -79,7 +79,7 @@
       resetBody: 'Tutti i numeri tornano disponibili e i premi si azzerano. Le cartelle restano le stesse.',
       resetAnnounce: 'Partita azzerata. I 90 numeri sono di nuovo disponibili.',
       cardsTitle: 'Cartelle',
-      cardsLede: 'Disattiva le cartelle che non hai distribuito: i premi vengono cercati solo tra quelle attive.',
+      cardsLede: 'Disattiva le cartelle che non hai distribuito: i premi vengono cercati solo tra quelle attive. Ogni premio va alle prime cartelle che lo raggiungono.',
       cardsSummary: (active, off) => `${active} ${active === 1 ? 'attiva' : 'attive'} · ${off} ${off === 1 ? 'non distribuita' : 'non distribuite'}`,
       ranges: 'Intervalli',
       rangeHint: 'Per esempio 8-20, 27',
@@ -187,7 +187,7 @@
       resetBody: 'Every number becomes available again and the prizes are cleared. The cards stay the same.',
       resetAnnounce: 'Game cleared. All 90 numbers are available again.',
       cardsTitle: 'Cards',
-      cardsLede: 'Disable the cards you did not hand out: prizes are checked only on active cards.',
+      cardsLede: 'Disable the cards you did not hand out: prizes are checked only on active cards. Each prize goes to the first cards that reach it.',
       cardsSummary: (active, off) => `${active} active · ${off} not distributed`,
       ranges: 'Ranges',
       rangeHint: 'For example 8-20, 27',
@@ -295,7 +295,7 @@
       resetBody: 'Tous les numéros redeviennent disponibles et les prix sont remis à zéro. Les cartes restent les mêmes.',
       resetAnnounce: 'Partie remise à zéro. Les 90 numéros sont de nouveau disponibles.',
       cardsTitle: 'Cartes',
-      cardsLede: "Désactivez les cartes que vous n'avez pas distribuées : les prix ne sont recherchés que parmi les cartes actives.",
+      cardsLede: "Désactivez les cartes que vous n'avez pas distribuées : les prix ne sont recherchés que parmi les cartes actives. Chaque prix revient aux premières cartes qui l'atteignent.",
       cardsSummary: (active, off) => `${active} active${active === 1 ? '' : 's'} · ${off} non distribuée${off === 1 ? '' : 's'}`,
       ranges: 'Plages',
       rangeHint: 'Par exemple 8-20, 27',
@@ -690,6 +690,14 @@
       .filter(Boolean);
   }
 
+  function claimedTiers(log) {
+    const tiers = new Set();
+    for (const entry of log) {
+      for (const award of entry.awards) tiers.add(award.tier);
+    }
+    return tiers;
+  }
+
   function tierLabel(tier) {
     return t(`tier${tier.charAt(0).toUpperCase()}${tier.slice(1)}`);
   }
@@ -709,6 +717,7 @@
       drawnSet: new Set(drawn),
       disabled: game.disabled,
       seen: game.seen,
+      claimed: claimedTiers(game.log),
     });
 
     game = { ...game, drawn, seen: result.seen };

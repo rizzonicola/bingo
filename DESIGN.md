@@ -301,6 +301,7 @@ La modalità cartelle tiene lo stesso centro di gravità del tabellone: numero e
 - **Card numbers:** `clamp(32px, 3vw, 44px)`, peso 800, cifre tabulari, 30px sotto i 380px. Più cartelle sono separate da un punto mediano.
 - **Bingo:** bordo e etichetta nell'accento, fondo accento tenue. Il resto dei gruppi resta su superficie rialzata con hairline. La parola "Bingo" identifica il premio anche senza colore.
 - **Entrance:** 240ms di fade e traduzione di 6px; `prefers-reduced-motion` la riduce a un cambio immediato.
+- **First only:** ogni livello si assegna una volta sola. I pannelli mostrano la prima estrazione che raggiunge ambo, terna, quaterna, cinquina e bingo; tutte le cartelle che lo raggiungono in quella estrazione sono elencate, le successive restano silenziose.
 - **Previous log:** massimo una riga per estrazione con premi, la più recente in alto, escluse le estrazioni già mostrate nel pannello dei premi correnti. Lo stato vuoto dice che le estrazioni con premi compaiono lì.
 
 ### Card chips

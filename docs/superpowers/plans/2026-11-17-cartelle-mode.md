@@ -10,7 +10,8 @@ main board's behavior.
 - Separate page, separate state key `bingo.cards.v1`, separate draw sequence.
 - 1–100 cards, default 12; three cards per A4 page.
 - Print themes: Classico, Natale, Crema, Bianco e nero.
-- Per-row thresholds 2/3/4/5 plus full-card Bingo; only new milestones.
+- Per-row thresholds 2/3/4/5 plus full-card Bingo; each tier is awarded only
+  on its first draw, including every card that reaches it on that draw.
 - Re-enabling a card syncs silently to the current draws.
 - Previous-prizes empty copy: “Le estrazioni con premi compaiono qui.” / “Draws
   with prizes appear here.” / “Les tirages avec des prix apparaissent ici.”
@@ -141,7 +142,8 @@ BingoPrizes = {
   TIER_ORDER: ['bingo', 'cinquina', 'quaterna', 'terna', 'ambo'],
   emptySeen(count),                                  // object keyed "1".."count"
   syncSeen(seen, cardNumber, grid, drawnSet),        // new seen object
-  detect({ cards, drawnSet, disabled, seen }),
+  detect({ cards, drawnSet, disabled, seen, claimed }),
+  // claimed: tiers already closed (derived from the log)
   // -> { seen, awards: [{ card, tier }] }
 }
 ```
@@ -151,8 +153,8 @@ BingoPrizes = {
 - `syncSeen` sets each row to the max of its stored value and the current count,
   and sets `bingo` if all 15 numbers are drawn.
 - `detect` ignores disabled cards, awards the highest newly reached row
-  threshold per row, and Bingo once when all 15 are drawn. It updates `seen`
-  only for active cards.
+  threshold per row, and Bingo once when all 15 are drawn. Tiers listed in
+  `claimed` update `seen` silently. It updates `seen` only for active cards.
 - Return awards highest-first (`bingo`, `cinquina`, `quaterna`, `terna`,
   `ambo`) and card number ascending inside a tier.
 - Inputs are not mutated; return a fresh `seen` object.
@@ -170,6 +172,8 @@ Use the canonical card from the spec:
 - 2/3/4/5 numbers on row 0 produce ambo/terna/quaterna/cinquina, once each.
 - Adding the last number produces both the row's cinquina and Bingo.
 - Running `detect` again with the same draws returns no awards.
+- A tier in `claimed` is silent but still updates `seen`; an unclaimed tier
+  reached on the same draw is awarded, even when several cards share it.
 - Disabled card produces no awards.
 - `syncSeen` with four row-0 numbers suppresses ambo/terna/quaterna; the next
   draw produces only cinquina.
@@ -337,9 +341,10 @@ BingoPdf = {
    - previous panel: all log entries except the entry for the latest draw,
      newest first; empty copy from the plan; saved status.
 6. Draw:
-   - pick a remaining number with the unbiased random helper, append, call
-     `BingoPrizes.detect`, store new `seen`, append a log entry only when there
-     are awards, persist, render, announce base + tier sentences.
+   - pick a remaining number with the unbiased random helper, derive the
+     claimed tiers from `log`, append, call `BingoPrizes.detect`, store new
+     `seen`, append a log entry only when there are awards, persist, render,
+     announce base + tier sentences.
    - announcements: base draw copy plus, per tier highest-first, singular and
      plural forms with card numbers joined by “e” / “and” / “et”.
 7. Reset: confirm; clear `drawn`, `log`, `seen` to `emptySeen`; keep cards,

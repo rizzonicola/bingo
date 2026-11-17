@@ -12,6 +12,12 @@ const CARD = [
   [8, null, 27, null, 49, 58, null, 79, null],
 ];
 
+const CARD_B = [
+  [1, 11, null, 31, 42, null, null, null, 89],
+  [null, 13, 21, null, null, 53, 64, 72, null],
+  [5, null, 25, null, 48, 59, null, 76, null],
+];
+
 function seeded(seed) {
   return max => {
     seed |= 0;
@@ -126,4 +132,46 @@ test('detect does not mutate the input seen object', () => {
   const snapshot = JSON.parse(JSON.stringify(seen));
   Prizes.detect({ cards: [CARD], drawnSet: new Set([3, 12]), disabled: [], seen });
   assert.deepEqual(seen, snapshot);
+});
+
+test('a tier closes after its first award', () => {
+  const cards = [CARD, CARD_B];
+  let seen = Prizes.emptySeen(2);
+  let result = Prizes.detect({ cards, drawnSet: new Set([3, 12]), disabled: [], seen });
+  assert.deepEqual(result.awards, [{ card: 1, tier: 'ambo' }]);
+  seen = result.seen;
+
+  result = Prizes.detect({ cards, drawnSet: new Set([3, 12, 1, 11]), disabled: [], seen, claimed: ['ambo'] });
+  assert.deepEqual(result.awards, []);
+  assert.deepEqual(result.seen[2].rows, [2, 0, 0]);
+
+  result = Prizes.detect({ cards, drawnSet: new Set([3, 12, 1, 11, 31]), disabled: [], seen: result.seen, claimed: ['ambo'] });
+  assert.deepEqual(result.awards, [{ card: 2, tier: 'terna' }]);
+});
+
+test('every card reaching an open tier on the same draw is awarded', () => {
+  const result = Prizes.detect({
+    cards: [CARD, CARD_B],
+    drawnSet: new Set([3, 12, 1, 11]),
+    disabled: [],
+    seen: Prizes.emptySeen(2),
+  });
+  assert.deepEqual(result.awards, [
+    { card: 1, tier: 'ambo' },
+    { card: 2, tier: 'ambo' },
+  ]);
+});
+
+test('a closed Bingo is tracked but not awarded again', () => {
+  const all = CARD.flat().filter(value => value !== null);
+  const result = Prizes.detect({
+    cards: [CARD],
+    drawnSet: new Set(all),
+    disabled: [],
+    seen: Prizes.emptySeen(1),
+    claimed: ['bingo'],
+  });
+  assert.equal(result.awards.some(award => award.tier === 'bingo'), false);
+  assert.equal(result.seen[1].bingo, true);
+  assert.deepEqual(result.awards.map(award => award.tier), ['cinquina', 'cinquina', 'cinquina']);
 });

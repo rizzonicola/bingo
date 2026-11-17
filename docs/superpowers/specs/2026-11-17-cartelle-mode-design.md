@@ -14,8 +14,9 @@ game played with printed cards:
 2. Download a print-ready A4 PDF directly, with three numbered cards per page.
 3. Print and distribute the cards.
 4. Call the numbers from the same screen. The screen shows the board, the latest
-   number, and every new prize — ambo, terna, quaterna, cinquina, bingo — with
-   the card numbers that reached it.
+   number, and the first prize at each tier — ambo, terna, quaterna, cinquina,
+   bingo — with the card numbers that reached it. A tier is closed after that
+   first draw; later cards reaching it are not announced.
 5. Cards that were not distributed can be disabled individually or by ranges
    such as `8-20, 27`, so they never appear in a prize call.
 
@@ -400,14 +401,21 @@ Prizes are per row, on active cards only:
 ### Rules
 
 - A row's threshold is reached when that row has that many drawn numbers. The
-  thresholds are cumulative but each is announced only once per row per game.
+  thresholds are cumulative but each tier is awarded only once per game: the
+  first ambo, the first terna, the first quaterna, the first cinquina, and the
+  first Bingo close that tier until the game is reset.
+- On the draw that closes a tier, every active card that reaches it is
+  awarded; all of them are announced together. Later cards reaching the same
+  tier are tracked silently and never announced.
 - A card can be at different thresholds on different rows at the same time.
+  Tiers are independent: a late terna is still announced after the ambo has
+  closed.
 - A card's full set of 15 numbers is a separate Bingo award. When the final
   number is drawn it normally also completes a row, so the same draw can
   produce a Cinquina on that card **and** the Bingo. Both are shown and
-  announced.
+  announced if both tiers are still open.
 - A draw can produce awards on many cards. All are collected and grouped by
-  tier.
+  tier, provided that tier is still open.
 - Only active cards are considered. Disabled cards produce no new awards.
 - When a card is re-enabled, its `seen` state is silently synced to the
   current draw counts: it may have already passed some thresholds while it was
@@ -600,6 +608,8 @@ generator small. The PDF is a document, not a screenshot of the app.
 - `seen[card]`: the highest row threshold processed for each of the three
   rows (0–5) and whether Bingo has been processed. Used to deduplicate awards
   and to sync silently on re-enable.
+- The closed tiers are derived from `log`: any tier that already appears in an
+  award is closed. Reset clears `log`, so a new game opens every tier again.
 - `log`: draws with at least one award, in draw order. The draw ordinal is
   derived from `drawn.indexOf(number) + 1`; entries whose number is not in
   `drawn` are dropped on load.
@@ -984,8 +994,8 @@ relying on random draws.
 - Four card themes: Classico, Natale, Crema, Bianco e nero.
 - Setup → download → automatic switch to the game.
 - All cards active by default; the referee disables the ones not distributed.
-- Per-row thresholds 2/3/4/5 plus full-card Bingo; only new thresholds
-  announced.
+- Per-row thresholds 2/3/4/5 plus full-card Bingo; only the first draw for
+  each tier is announced, including every card that reaches it on that draw.
 - Re-enabling syncs silently; reset keeps the deck; new cards clears it and
   returns to the defaults (12 cards, Classico).
 - A saved deck is accepted only if it has 1–100 valid, unique cards; an invalid

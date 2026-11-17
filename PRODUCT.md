@@ -39,7 +39,7 @@ Nessuna registrazione, nessun contorno da sala da gioco: due schermate pulite, p
 - Azzeramento della partita protetto da una conferma.
 - Modalità cartelle separata: da 1 a 100 cartelle numerate, tre per pagina A4, scaricate direttamente come PDF senza passare dal dialogo di stampa.
 - Quattro temi di stampa: Classico, Natale, Crema e Bianco e nero.
-- Premi cercati solo sulle cartelle attive: ambo, terna, quaterna, cinquina e bingo, annunciati con i numeri delle cartelle. Le cartelle non distribuite si disattivano una per una o per intervalli come `8-20, 27`, e non generano premi.
+- Premi cercati solo sulle cartelle attive: ambo, terna, quaterna, cinquina e bingo, annunciati con i numeri delle cartelle. Ogni livello si assegna una volta sola, alla prima estrazione che lo raggiunge. Le cartelle non distribuite si disattivano una per una o per intervalli come `8-20, 27`, e non generano premi.
 - Riaprire una cartella non ripete i premi già passati: la sincronizzazione è silenziosa. "Nuove cartelle" azzera la partita e torna ai valori iniziali.
 - Stato della partita e preferenze salvati in `localStorage`, con degradazione silenziosa se lo storage non è disponibile. La partita delle cartelle usa una chiave separata da quella del tabellone.
 - Lingua: sistema (predefinita), italiano, inglese, francese. Con "sistema" la lingua segue quella del browser; se non è una delle tre, si usa l'inglese.

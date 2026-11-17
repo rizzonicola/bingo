@@ -45,11 +45,12 @@
     };
   }
 
-  function detect({ cards, drawnSet, disabled, seen }) {
+  function detect({ cards, drawnSet, disabled, seen, claimed }) {
     const drawn = drawnSet instanceof Set ? drawnSet : new Set(drawnSet || []);
     const off = disabled instanceof Set ? disabled : new Set(disabled || []);
     const current = seen || {};
     const next = { ...current };
+    const closed = claimed instanceof Set ? claimed : new Set(claimed || []);
     const awards = [];
 
     cards.forEach((grid, index) => {
@@ -64,14 +65,14 @@
       counts.forEach((count, row) => {
         if (count < 2 || count <= rows[row]) return;
         const tier = ROW_TIERS[Math.min(5, count)];
-        if (!tier) return;
-        awards.push({ card: cardNumber, tier });
         rows[row] = Math.min(5, count);
+        if (!tier || closed.has(tier)) return;
+        awards.push({ card: cardNumber, tier });
       });
 
       const total = counts.reduce((sum, count) => sum + count, 0);
       if (total === 15 && !bingo) {
-        awards.push({ card: cardNumber, tier: 'bingo' });
+        if (!closed.has('bingo')) awards.push({ card: cardNumber, tier: 'bingo' });
         bingo = true;
       }
 
