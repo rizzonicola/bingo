@@ -197,10 +197,12 @@ kbd {
   border-radius: 10px;
   background: var(--accent);
   color: var(--accent-ink);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: -.04em;
   transition: transform 180ms var(--ease);
+}
+.brand__mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 .brand__word {
   font-size: 20px;

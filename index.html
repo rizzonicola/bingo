@@ -14,6 +14,9 @@
 <meta property="og:description" content="Estrai i numeri uno alla volta, vedi l'ultimo in grande e tieni traccia di tutti quelli usciti.">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="assets/fonts/gabarito-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css">
 <script>
@@ -38,7 +41,16 @@
 <div class="app">
   <header class="topbar">
     <a class="brand" href="./" aria-label="Tombola">
-      <span class="brand__mark" aria-hidden="true">90</span>
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 256 256" focusable="false">
+          <g fill="currentColor">
+            <rect x="30" y="30" width="80" height="80" rx="21"/>
+            <rect x="130" y="30" width="80" height="80" rx="21"/>
+            <rect x="30" y="130" width="80" height="80" rx="21"/>
+            <circle cx="178" cy="178" r="48"/>
+          </g>
+        </svg>
+      </span>
       <span class="brand__word">tombola</span>
     </a>
     <button class="settings-button" type="button" id="open-settings" aria-haspopup="dialog">
