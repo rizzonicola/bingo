@@ -1,6 +1,6 @@
 ---
 name: Bingo
-description: Tabellone digitale da tavolo per estrarre i 90 numeri del bingo
+description: Tabellone digitale e cartelle stampabili per il bingo da 1 a 90
 colors:
   table-teal: "#0d766e"
   table-teal-deep: "#095e58"
@@ -183,6 +183,7 @@ L'interfaccia resta piatta: pannelli netti, bordi sottili, nessuna ombra e nessu
 - Il tema Natale è una variante sobria: cambia la palette, non la gerarchia. Le tre varianti festive condividono cappello, neve e stella.
 - Superfici piatte separate da hairline, mai da ombre.
 - Movimento breve e localizzato: il numero entra, il resto non si muove.
+- La modalità cartelle è un secondo tavolo, non una seconda estetica: stesso guscio, stessi token, un PDF da stampa e pannelli premio in più.
 
 ## Colors
 
@@ -246,6 +247,8 @@ Sopra i 1000px il gioco è una griglia a due colonne: il tabellone occupa la sin
 
 Sotto i 1000px tutto diventa una colonna, nell'ordine scena → tabellone → cronologia; il tabellone conserva il rapporto 10/9 e il padding scende a 10px. Sotto i 640px l'intestazione perde la colonna laterale del conteggio, che passa sotto l'introduzione; i dialoghi diventano un foglio dal basso. Il ritmo usa 4, 8, 12, 16, 24, 32, 48px; le distanze tra pannelli sono 16px (12px su telefono).
 
+La modalità cartelle riusa il guscio e la barra superiore: il link di modo e le impostazioni stanno a destra, il link al tabellone occupa il posto del modo opposto. Sopra i 1000px il gioco è una griglia a due colonne, tabellone a sinistra e rail da 320–380px a destra con scena, premi di questa estrazione e premi precedenti. Il tabellone resta intero; il registro dei premi scorre. Sotto i 1000px il rail si apre in `display: contents` e l'ordine diventa scena → premi di questa estrazione → tabellone → premi precedenti. Sotto i 640px la scena si impila e il drawer delle cartelle è un foglio dal basso con testata e piè di pagina fissi.
+
 ## Elevation & Depth
 
 Nessuna ombra. La profondità è tonale: fondo, superficie e superficie rialzata si distinguono per pochi punti di luminosità e per una hairline da 1px. I dialoghi sono l'unico piano veramente sollevato, e lo dichiarano con un backdrop scuro, non con un'ombra. Il pulsante principale non si solleva: cambia colore e si abbassa di 1px alla pressione.
@@ -288,6 +291,36 @@ Angoli morbidi ma non arrotondati per gioco: 8px per le celle, 10px per i contro
 - **Drawer:** foglio laterale da 420px su desktop, foglio dal basso su mobile, fondo superficie, bordo hairline, backdrop scuro. Titolo 24px, sezioni con legend 13px, pulsante "Fatto" a tutta larghezza in fondo. Su mobile il foglio entra dal basso, titolo e chiusura restano agganciati in alto e il piè di pagina in basso mentre il contenuto scorre.
 - **Confirm:** dialogo centrato da 420px, titolo 22px, corpo 14.5px, azioni a destra (in colonna inversa su mobile). Il focus iniziale cade su "Annulla".
 
+## Cartelle Mode
+
+### Hierarchy
+La modalità cartelle tiene lo stesso centro di gravità del tabellone: numero enorme, nome napoletano, stato e pulsante nella scena. Il resto è subordinato in quest'ordine: i premi di questa estrazione, il tabellone, i premi precedenti. Il conteggio attivo e il pulsante "Cartelle · N attive" stanno nella testata della pagina, non nella barra superiore.
+
+### Prize panels
+- **Tier:** 17–20px, peso 700, colore nebbia; il gruppo Bingo usa il colore dell'accento.
+- **Card numbers:** `clamp(32px, 3vw, 44px)`, peso 800, cifre tabulari, 30px sotto i 380px. Più cartelle sono separate da un punto mediano.
+- **Bingo:** bordo e etichetta nell'accento, fondo accento tenue. Il resto dei gruppi resta su superficie rialzata con hairline. La parola "Bingo" identifica il premio anche senza colore.
+- **Entrance:** 240ms di fade e traduzione di 6px; `prefers-reduced-motion` la riduce a un cambio immediato.
+- **Previous log:** massimo una riga per estrazione con premi, la più recente in alto, escluse le estrazioni già mostrate nel pannello dei premi correnti. Lo stato vuoto dice che le estrazioni con premi compaiono lì.
+
+### Card chips
+- **Active:** fondo accento tenue, bordo pieno nell'accento, punto da 4px nell'angolo in alto a destra.
+- **Not distributed:** bordo tratteggiato hairline marcato, fondo trasparente, testo nebbia, nessun punto. Il trattino non è l'unico segnale: cambiano anche colore e punto.
+- **Grid:** `repeat(auto-fill, minmax(44px, 1fr))`, sei colonne a 320px; ogni chip è alta almeno 44px e porta un nome accessibile "Cartella N, attiva / non distribuita".
+- **Summary:** "N attive · M non distribuite", con singolari corretti. Il pulsante della testata ripete il conteggio delle attive.
+
+### Print themes
+Quattro palette separate per il PDF, indipendenti dal tema dell'interfaccia:
+- **Classico:** testata verde acqua #0d766e, inchiostro quasi bianco #f5fbf8, numeri #1a2122, griglia #c7d2cf, celle bianche, accento #0d766e.
+- **Natale:** testata pino #0c1711, testata oro #e8c375, numeri #1f3128, griglia #cfc7b4, celle bianche, accento #a8823c.
+- **Crema:** testata beige #f1e8d8, testata rosso profondo #8f1d17, numeri #1f3128, griglia #d8cbb8, celle #fffaf0, accento #b3261e.
+- **Bianco e nero:** testata #1a1a1a, testata bianca, numeri neri, griglia #b3b3b3, celle bianche, accento #1a1a1a. Per questa palette il flusso PDF usa solo operatori in scala di grigi.
+
+Le anteprime nel setup sono miniature CSS delle cartelle, non immagini: mostrano fascia, griglia 9 × 3 e numeri pieni nella palette di stampa, mentre il controllo intorno usa i token dell'interfaccia.
+
+### Navigation and the main board
+Il tabellone principale non cambia gerarchia, layout o comportamento: l'unica aggiunta visibile è il link "Cartelle" nella barra superiore, con icona 2 × 2 e altezza 44px. Sotto i 640px il link diventa un pulsante icona; sotto i 380px anche le impostazioni perdono l'etichetta per far stare la barra a 320px. La pagina cartelle ha il link inverso "Tabellone".
+
 ## Do's and Don'ts
 
 ### Do:
@@ -298,6 +331,7 @@ Angoli morbidi ma non arrotondati per gioco: 8px per le celle, 10px per i contro
 - **Do** usare cifre tabulari e due cifre nel tabellone (01–90).
 - **Do** mostrare il nome napoletano come seconda riga, più piccola del numero e più grande dello stato.
 - **Do** tenere i dettagli natalizi piccoli, statici e fuori dal contenuto informativo.
+- **Do** tenere i numeri delle cartelle premio almeno a 30px, così si leggono da lontano.
 - **Do** rispettare `prefers-reduced-motion` eliminando animazioni e transizioni.
 
 ### Don't:
@@ -308,3 +342,5 @@ Angoli morbidi ma non arrotondati per gioco: 8px per le celle, 10px per i contro
 - **Don't** usare il rosso per i numeri, i punteggi o lo stato della partita. Nel tema Natale crema il rosso è l'accento operativo e si usa solo come tale; negli altri temi resta confinato al cappello illustrato.
 - **Don't** animare la neve, far cadere coriandoli o aggiungere suoni natalizi.
 - **Don't** trasformare la cronologia in una lista lunga: dodici chip sono il limite.
+- **Don't** spostare o nascondere il tabellone per fare posto ai premi: i premi si aggiungono, non sostituiscono il contesto.
+- **Don't** usare il rosso per un premio o per una cartella disattivata: il rosso resta riservato all'azione irreversibile.

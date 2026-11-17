@@ -1,7 +1,7 @@
 {
   "name": "Bingo",
   "short_name": "Bingo",
-  "description": "Tabellone digitale per estrarre i numeri del bingo da 1 a 90.",
+  "description": "Tabellone digitale e cartelle stampabili per il bingo da 1 a 90.",
   "lang": "it",
   "dir": "ltr",
   "start_url": "./",
