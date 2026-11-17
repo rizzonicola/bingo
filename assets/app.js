@@ -5,8 +5,102 @@
   const STATE_KEY = 'tombola.state.v1';
   const PREFS_KEY = 'tombola.prefs.v1';
   const LANGUAGES = ['it', 'en', 'fr'];
-  const THEMES = ['system', 'light', 'dark'];
+  const THEMES = ['system', 'light', 'dark', 'christmas'];
+  const THEME_COLORS = { light: '#e8ece7', dark: '#121617', christmas: '#0c1711' };
   const LANGUAGE_NAMES = { it: 'Italiano', en: 'English', fr: 'Français' };
+
+  const NEAPOLITAN_NAMES = [
+    "L'Italia",
+    "'A piccerella",
+    "'A gatta",
+    "'O puorco",
+    "'A mano",
+    "Chella ca guarda 'nterra",
+    "'O vaso",
+    "'A Maronna",
+    "'A figliata",
+    "'E fasule",
+    "'E suricille",
+    "'O surdato",
+    "Sant'Antonio",
+    "'O mbriaco",
+    "'O guaglione",
+    "'O culo",
+    "'A disgrazia",
+    "'O sanghe",
+    "'A resata",
+    "'A festa",
+    "'A femmena annura",
+    "'O pazzo",
+    "'O scemo",
+    "'E gguardie",
+    "Natale",
+    "Nanninella",
+    "'O cantero",
+    "'E zizze",
+    "'O pate d'e criature",
+    "'E ppalle d'o tenente",
+    "'O padrone 'e casa",
+    "'O capitone",
+    "Ll'anne 'e Cristo",
+    "'A capa",
+    "L'aucelluzzo",
+    "'E castagnelle",
+    "'O monaco",
+    "'E mmazzate",
+    "'A funa 'nganna",
+    "'A paposcia",
+    "'O curtiello",
+    "'O cafè",
+    "'Onna pereta fore 'o barcone",
+    "'E ccancelle",
+    "'O vino buono",
+    "'E denare",
+    "'O muorto",
+    "'O muorto che parla",
+    "'O piezzo 'e carne",
+    "'O ppane",
+    "'O ciardino",
+    "'A mamma",
+    "'O viecchio",
+    "'O cappiello",
+    "'A museca",
+    "'A caruta",
+    "'O scartellato",
+    "'O paccotto",
+    "'E pile",
+    "Se lamenta",
+    "'O cacciatore",
+    "'O muorto acciso",
+    "'A sposa",
+    "'A sciammeria",
+    "'O chianto",
+    "'E ddoie zetelle",
+    "'O totaro int'a chitarra",
+    "'A zuppa cotta",
+    "Sott'e 'ncoppa",
+    "'O palazzo",
+    "L'ommo 'e merda",
+    "'A maraviglia",
+    "'O spitale",
+    "'A rotta",
+    "Pulcinella",
+    "'A funtana",
+    "'E riavulille",
+    "'A bella figliola",
+    "'O mariuolo",
+    "'A vocca",
+    "'E sciure",
+    "'A tavula 'mbandita",
+    "'O maletiempo",
+    "'A cchiesa",
+    "Ll'aneme 'o priatorio",
+    "'A puteca",
+    "'E perucchie",
+    "'E casecavalle",
+    "'A vecchia",
+    "'A paura",
+  ];
 
   const COPY = {
     it: {
@@ -34,13 +128,17 @@
       shortcut: 'per estrarre',
       spaceKey: 'Spazio',
       close: 'Chiudi',
-      settingsLede: 'La lingua e il colore si cambiano quando vuoi. Le modifiche restano su questo dispositivo.',
-      settingsLedePlain: 'La lingua e il colore si cambiano quando vuoi.',
+      settingsLede: 'La lingua, i nomi e il colore si cambiano quando vuoi. Le modifiche restano su questo dispositivo.',
+      settingsLedePlain: 'La lingua, i nomi e il colore si cambiano quando vuoi.',
       language: 'Lingua',
       system: 'Sistema',
       color: 'Colore',
       light: 'Chiaro',
       dark: 'Scuro',
+      christmas: 'Natale',
+      names: 'Nomi napoletani',
+      namesToggle: 'Mostra il nome tradizionale',
+      namesHint: 'Sotto il numero compare il nome tradizionale napoletano.',
       done: 'Fatto',
       resetTitle: 'Ricominciare da capo?',
       resetBody: "Tutti i numeri tornano disponibili e il tabellone si svuota. L'operazione non si può annullare.",
@@ -51,10 +149,15 @@
       drawOrdinal: n => `${n}ª estrazione`,
       remaining: n => n === 1 ? 'Resta 1 numero.' : `Restano ${n} numeri.`,
       allDrawn: 'Tutti i 90 numeri sono usciti.',
-      lastNumberSr: n => `Ultimo numero estratto: ${n}.`,
-      drawAnnounce: (n, rest) => rest === 0
-        ? `Estratto il numero ${n}. Tutti i 90 numeri sono usciti.`
-        : `Estratto il numero ${n}. ${rest === 1 ? 'Resta 1 numero.' : `Restano ${rest} numeri.`}`,
+      lastNumberSr: (n, name) => name
+        ? `Ultimo numero estratto: ${n}, ${name}.`
+        : `Ultimo numero estratto: ${n}.`,
+      drawAnnounce: (n, rest, name) => {
+        const called = `Estratto il numero ${n}${name ? `: ${name}` : ''}.`;
+        return rest === 0
+          ? `${called} Tutti i 90 numeri sono usciti.`
+          : `${called} ${rest === 1 ? 'Resta 1 numero.' : `Restano ${rest} numeri.`}`;
+      },
       resetAnnounce: 'Tabellone azzerato. I 90 numeri sono di nuovo disponibili.',
     },
     en: {
@@ -82,13 +185,17 @@
       shortcut: 'to draw',
       spaceKey: 'Space',
       close: 'Close',
-      settingsLede: 'Change the language and color whenever you like. Your choices stay on this device.',
-      settingsLedePlain: 'Change the language and color whenever you like.',
+      settingsLede: 'Change the language, the names, and the color whenever you like. Your choices stay on this device.',
+      settingsLedePlain: 'Change the language, the names, and the color whenever you like.',
       language: 'Language',
       system: 'System',
       color: 'Color',
       light: 'Light',
       dark: 'Dark',
+      christmas: 'Christmas',
+      names: 'Neapolitan names',
+      namesToggle: 'Show the traditional name',
+      namesHint: 'The traditional Neapolitan name appears under each number.',
       done: 'Done',
       resetTitle: 'Start over?',
       resetBody: 'Every number becomes available again and the board is cleared. This cannot be undone.',
@@ -99,10 +206,15 @@
       drawOrdinal: n => `Draw ${n}`,
       remaining: n => n === 1 ? '1 number left.' : `${n} numbers left.`,
       allDrawn: 'All 90 numbers are out.',
-      lastNumberSr: n => `Last number drawn: ${n}.`,
-      drawAnnounce: (n, rest) => rest === 0
-        ? `Number ${n} drawn. All 90 numbers are out.`
-        : `Number ${n} drawn. ${rest === 1 ? '1 number left.' : `${rest} numbers left.`}`,
+      lastNumberSr: (n, name) => name
+        ? `Last number drawn: ${n}, ${name}.`
+        : `Last number drawn: ${n}.`,
+      drawAnnounce: (n, rest, name) => {
+        const called = `Number ${n} drawn${name ? `: ${name}` : ''}.`;
+        return rest === 0
+          ? `${called} All 90 numbers are out.`
+          : `${called} ${rest === 1 ? '1 number left.' : `${rest} numbers left.`}`;
+      },
       resetAnnounce: 'Board cleared. All 90 numbers are available again.',
     },
     fr: {
@@ -130,13 +242,17 @@
       shortcut: 'pour tirer',
       spaceKey: 'Espace',
       close: 'Fermer',
-      settingsLede: 'Changez la langue et la couleur quand vous voulez. Vos choix restent sur cet appareil.',
-      settingsLedePlain: 'Changez la langue et la couleur quand vous voulez.',
+      settingsLede: 'Changez la langue, les noms et la couleur quand vous voulez. Vos choix restent sur cet appareil.',
+      settingsLedePlain: 'Changez la langue, les noms et la couleur quand vous voulez.',
       language: 'Langue',
       system: 'Système',
       color: 'Couleur',
       light: 'Clair',
       dark: 'Sombre',
+      christmas: 'Noël',
+      names: 'Noms napolitains',
+      namesToggle: 'Afficher le nom traditionnel',
+      namesHint: 'Le nom traditionnel napolitain apparaît sous chaque numéro.',
       done: 'Terminé',
       resetTitle: 'Recommencer à zéro ?',
       resetBody: 'Tous les numéros redeviennent disponibles et le tableau se vide. Cette action est irréversible.',
@@ -147,10 +263,15 @@
       drawOrdinal: n => `Tirage ${n}`,
       remaining: n => n === 1 ? '1 numéro restant.' : `${n} numéros restants.`,
       allDrawn: 'Les 90 numéros sont sortis.',
-      lastNumberSr: n => `Dernier numéro tiré : ${n}.`,
-      drawAnnounce: (n, rest) => rest === 0
-        ? `Numéro ${n} tiré. Les 90 numéros sont sortis.`
-        : `Numéro ${n} tiré. ${rest === 1 ? '1 numéro restant.' : `${rest} numéros restants.`}`,
+      lastNumberSr: (n, name) => name
+        ? `Dernier numéro tiré : ${n}, ${name}.`
+        : `Dernier numéro tiré : ${n}.`,
+      drawAnnounce: (n, rest, name) => {
+        const called = `Numéro ${n} tiré${name ? ` : ${name}` : ''}.`;
+        return rest === 0
+          ? `${called} Les 90 numéros sont sortis.`
+          : `${called} ${rest === 1 ? '1 numéro restant.' : `${rest} numéros restants.`}`;
+      },
       resetAnnounce: 'Tableau remis à zéro. Les 90 numéros sont de nouveau disponibles.',
     },
   };
@@ -173,6 +294,7 @@
     settingsDialog: document.getElementById('settings-dialog'),
     resetDialog: document.getElementById('reset-dialog'),
     lastNumber: document.getElementById('last-number'),
+    lastName: document.getElementById('last-name'),
     lastNumberSr: document.getElementById('last-number-sr'),
     stageStatus: document.getElementById('stage-status'),
     stageOrdinal: document.getElementById('stage-ordinal'),
@@ -184,6 +306,7 @@
     savedLabel: document.querySelector('.history__saved span'),
     settingsLede: document.getElementById('settings-lede'),
     detectedLanguage: document.getElementById('detected-language'),
+    namesInput: document.getElementById('neapolitan-names'),
     shortcut: document.querySelector('.shortcut'),
     liveRegion: document.getElementById('live-region'),
     languageInputs: [...document.querySelectorAll('input[name="language"]')],
@@ -203,6 +326,10 @@
   function t(key, ...args) {
     const value = COPY[resolvedLang][key];
     return typeof value === 'function' ? value(...args) : value;
+  }
+
+  function neapolitanName(number) {
+    return prefs.names ? (NEAPOLITAN_NAMES[number - 1] || '') : '';
   }
 
   function buildBoard() {
@@ -231,13 +358,19 @@
 
     for (const [number, cell] of cells) {
       const isDrawn = drawnSet.has(number);
+      const name = neapolitanName(number);
       cell.classList.toggle('is-drawn', isDrawn);
       cell.classList.toggle('is-last', number === latest);
       cell.classList.remove('is-new');
       cell.setAttribute(
         'aria-label',
-        `${t('numberWord')} ${number}, ${isDrawn ? t('drawnCell') : t('pendingCell')}`
+        `${t('numberWord')} ${number}${name ? `, ${name}` : ''}, ${isDrawn ? t('drawnCell') : t('pendingCell')}`
       );
+      if (name) {
+        cell.title = name;
+      } else {
+        cell.removeAttribute('title');
+      }
     }
 
     if (newNumber === null || !animate) return;
@@ -261,10 +394,13 @@
   function updateStage(animate) {
     const latest = drawn.length ? drawn[drawn.length - 1] : null;
     const full = drawn.length >= TOTAL;
+    const name = latest === null ? '' : neapolitanName(latest);
 
     dom.lastNumber.classList.toggle('is-empty', latest === null);
     dom.lastNumber.textContent = latest === null ? '0' : String(latest);
-    dom.lastNumberSr.textContent = latest === null ? '' : t('lastNumberSr', latest);
+    dom.lastName.textContent = name;
+    dom.lastName.hidden = !name;
+    dom.lastNumberSr.textContent = latest === null ? '' : t('lastNumberSr', latest, name);
     dom.stageOrdinal.hidden = latest === null;
     dom.stageOrdinal.textContent = latest === null ? '' : t('drawOrdinal', drawn.length);
 
@@ -291,8 +427,13 @@
 
     recent.forEach((number, index) => {
       const chip = document.createElement('li');
+      const name = neapolitanName(number);
       chip.className = `history__chip${index === 0 ? ' is-latest' : ''}${animate && index === 0 ? ' is-new' : ''}`;
       chip.textContent = String(number).padStart(2, '0');
+      if (name) {
+        chip.title = name;
+        chip.setAttribute('aria-label', `${number}, ${name}`);
+      }
       dom.historyList.appendChild(chip);
     });
   }
@@ -309,7 +450,7 @@
     drawn = [...drawn, number];
     persistState();
     render({ newNumber: number, animate: true });
-    announce(t('drawAnnounce', number, TOTAL - drawn.length));
+    announce(t('drawAnnounce', number, TOTAL - drawn.length, neapolitanName(number)));
   }
 
   function randomIndex(max) {
@@ -336,7 +477,7 @@
       ? (darkMedia.matches ? 'dark' : 'light')
       : prefs.theme;
     html.dataset.theme = effective;
-    if (themeMeta) themeMeta.content = effective === 'dark' ? '#121617' : '#e8ece7';
+    if (themeMeta) themeMeta.content = THEME_COLORS[effective] || THEME_COLORS.light;
   }
 
   function applyLanguage() {
@@ -380,6 +521,7 @@
   function syncControls() {
     dom.languageInputs.forEach(input => { input.checked = input.value === prefs.lang; });
     dom.themeInputs.forEach(input => { input.checked = input.value === prefs.theme; });
+    dom.namesInput.checked = prefs.names;
   }
 
   function announce(message) {
@@ -422,6 +564,11 @@
         persistPrefs();
         applyTheme();
       });
+    });
+    dom.namesInput.addEventListener('change', () => {
+      prefs.names = dom.namesInput.checked;
+      persistPrefs();
+      render();
     });
 
     document.addEventListener('keydown', handleShortcut);
@@ -505,6 +652,7 @@
     return {
       lang: ['system', ...LANGUAGES].includes(stored.lang) ? stored.lang : 'system',
       theme: THEMES.includes(stored.theme) ? stored.theme : 'system',
+      names: stored.names === true,
     };
   }
 

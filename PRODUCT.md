@@ -38,7 +38,8 @@ Nessuna registrazione, nessuna cartella da generare, nessun contorno da sala da 
 - Azzeramento della partita protetto da una conferma.
 - Stato della partita e preferenze salvati in `localStorage`, con degradazione silenziosa se lo storage non è disponibile.
 - Lingua: sistema (predefinita), italiano, inglese, francese. Con "sistema" la lingua segue quella del browser; se non è una delle tre, si usa l'inglese.
-- Colore: sistema (predefinito), chiaro, scuro. Con "sistema" il tema segue `prefers-color-scheme`.
+- Nomi napoletani: interruttore nelle impostazioni, spento di default. Quando è acceso, il nome tradizionale compare sotto l'ultimo numero e nelle etichette di tabellone e cronologia.
+- Colore: sistema (predefinito), chiaro, scuro, Natale. Con "sistema" il tema segue `prefers-color-scheme`; il tema Natale è un tema scuro dedicato e resta stabile al cambio di tema di sistema.
 - Verdetto finale, generazione di cartelle, suoni e multiplayer non fanno parte di questa versione.
 
 ## Brand Commitments
@@ -61,7 +62,7 @@ Nessun asset del cliente, nessuna fotografia, nessun logo esistente. Il marchio,
 
 ## Accessibility & Inclusion
 
-- Contrasto testo conforme WCAG AA in entrambi i temi; il numero grande supera AA.
+- Contrasto testo conforme WCAG AA in tutti i temi; il numero grande supera AA.
 - Ogni controllo ha un nome accessibile; i cambi di stato vengono annunciati con una live region.
 - Focus visibile, navigazione da tastiera, dialoghi nativi con chiusura con Esc.
 - `prefers-reduced-motion` eliminato o ridotto in tutte le animazioni.

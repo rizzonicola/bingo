@@ -25,12 +25,12 @@
     root.classList.replace('no-js', 'js');
     let prefs = {};
     try { prefs = JSON.parse(localStorage.getItem('tombola.prefs.v1') || '{}') || {}; } catch (error) {}
-    const theme = ['light', 'dark'].includes(prefs.theme)
+    const theme = ['light', 'dark', 'christmas'].includes(prefs.theme)
       ? prefs.theme
       : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     root.dataset.theme = theme;
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = theme === 'dark' ? '#121617' : '#e8ece7';
+    if (meta) meta.content = theme === 'dark' ? '#121617' : theme === 'christmas' ? '#0c1711' : '#e8ece7';
   })();
 </script>
 <script src="assets/app.js" defer></script>
@@ -42,13 +42,18 @@
   <header class="topbar">
     <a class="brand" href="./" aria-label="Tombola">
       <span class="brand__mark" aria-hidden="true">
-        <svg viewBox="0 0 256 256" focusable="false">
+        <svg class="brand__glyph" viewBox="0 0 256 256" focusable="false">
           <g fill="currentColor">
             <rect x="30" y="30" width="80" height="80" rx="21"/>
             <rect x="130" y="30" width="80" height="80" rx="21"/>
             <rect x="30" y="130" width="80" height="80" rx="21"/>
             <circle cx="178" cy="178" r="48"/>
           </g>
+        </svg>
+        <svg class="brand__hat" viewBox="0 0 48 40" focusable="false">
+          <path d="M7 31C5 19 13 7 25 5c7-1.2 12 1 15 5 2 2.8 1.5 6-1 7.5-2.5 1.5-5.5.5-7-2-2.2-3.7-6.2-5-10.5-4-6.5 1.5-10 8.5-9 18.5Z" fill="#c7352c"/>
+          <rect x="4" y="29" width="36" height="9" rx="4.5" fill="#f8f3e7"/>
+          <circle cx="43" cy="9" r="5" fill="#f8f3e7"/>
         </svg>
       </span>
       <span class="brand__word">tombola</span>
@@ -86,6 +91,7 @@
         </div>
         <div class="stage__number-wrap">
           <p class="stage__number is-empty" id="last-number" aria-hidden="true">0</p>
+          <p class="stage__name" id="last-name" aria-hidden="true" hidden></p>
           <p class="sr-only" id="last-number-sr"></p>
         </div>
         <p class="stage__status" id="stage-status" data-i18n="noDraw">Nessun numero estratto.</p>
@@ -200,6 +206,22 @@
     </fieldset>
 
     <fieldset class="setting">
+      <legend data-i18n="names">Nomi napoletani</legend>
+      <label class="toggle">
+        <input class="sr-only" type="checkbox" id="neapolitan-names" aria-labelledby="names-toggle-label" aria-describedby="names-toggle-hint">
+        <span class="toggle__body">
+          <span class="toggle__copy">
+            <span class="toggle__label" id="names-toggle-label" data-i18n="namesToggle">Mostra il nome tradizionale</span>
+            <small id="names-toggle-hint" data-i18n="namesHint">Sotto il numero compare il nome tradizionale napoletano.</small>
+          </span>
+          <span class="toggle__switch" aria-hidden="true">
+            <span class="toggle__thumb"></span>
+          </span>
+        </span>
+      </label>
+    </fieldset>
+
+    <fieldset class="setting">
       <legend data-i18n="color">Colore</legend>
       <div class="choices choices--theme">
         <label class="choice">
@@ -223,6 +245,14 @@
           <span class="choice__body choice__body--stacked">
             <span class="swatch swatch--dark" aria-hidden="true"></span>
             <span class="choice__label" data-i18n="dark">Scuro</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="choice">
+          <input class="sr-only" type="radio" name="theme" value="christmas">
+          <span class="choice__body choice__body--stacked">
+            <span class="swatch swatch--xmas" aria-hidden="true"></span>
+            <span class="choice__label" data-i18n="christmas">Natale</span>
             <span class="choice__mark" aria-hidden="true"></span>
           </span>
         </label>

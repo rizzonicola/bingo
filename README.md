@@ -14,11 +14,12 @@ Poi visita `http://localhost:4173`.
 
 - Estrazione casuale uniforme tra i 90 numeri, senza ripetizioni.
 - Ultimo numero in grande, conteggio degli estratti, barra di avanzamento e cronologia degli ultimi 12.
+- Nomi tradizionali napoletani da 1 a 90, attivabili dalle impostazioni (spenti di default).
 - Barra spaziatrice per estrarre un numero.
 - Azzeramento protetto da una conferma.
 - Partita e preferenze salvate in `localStorage`: ricaricare la pagina non perde la serata.
 - Lingua: sistema, italiano, inglese, francese.
-- Colore: sistema, chiaro, scuro.
+- Colore: sistema, chiaro, scuro, Natale. Il tema Natale aggiunge pino, oro e piccoli dettagli illustrati.
 - Funziona senza build, senza framework e senza dipendenze esterne. Il font Gabarito è self-hosted con licenza OFL.
 
 Non ci sono cartelle da generare, verdetto finale, suoni o multiplayer: il perimetro è documentato in `PRODUCT.md`.

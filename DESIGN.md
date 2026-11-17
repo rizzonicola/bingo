@@ -19,6 +19,14 @@ colors:
   night-muted: "#a4aeaa"
   signal-red: "#b42318"
   signal-red-night: "#e5484d"
+  pine-night: "#0c1711"
+  pine-surface: "#122118"
+  pine-raised: "#1a2c20"
+  cream-ink: "#f4eddc"
+  pine-mist: "#b7bea9"
+  tree-gold: "#e8c375"
+  stage-gold: "#f0cc7a"
+  santa-red: "#c7352c"
 typography:
   display:
     fontFamily: "Gabarito, ui-sans-serif, system-ui, sans-serif"
@@ -38,6 +46,12 @@ typography:
     fontWeight: 800
     lineHeight: 1.1
     letterSpacing: "-0.03em"
+  number-name:
+    fontFamily: "Gabarito, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "clamp(18px, 1.55vw, 22px)"
+    fontWeight: 700
+    lineHeight: 1.2
+    letterSpacing: "-0.02em"
   body:
     fontFamily: "Gabarito, ui-sans-serif, system-ui, sans-serif"
     fontSize: "16px"
@@ -129,6 +143,10 @@ components:
     backgroundColor: "transparent"
     textColor: "{colors.table-teal}"
     typography: "{typography.display}"
+  number-name:
+    backgroundColor: "transparent"
+    textColor: "{colors.slate-ink}"
+    typography: "{typography.number-name}"
   drawer:
     backgroundColor: "{colors.green-surface}"
     textColor: "{colors.slate-ink}"
@@ -149,12 +167,14 @@ L'interfaccia resta piatta: pannelli netti, bordi sottili, nessuna ombra e nessu
 - Un accento operativo, usato solo per lo stato del gioco e l'azione principale.
 - Il tabellone 10 × 9 è sempre visibile e non si sposta.
 - Il numero appena estratto domina la scena; il resto resta quieto.
+- Il nome napoletano è una seconda riga, subordinata al numero.
+- Il tema Natale è una variante scura e sobria: cambia la palette, non la gerarchia.
 - Superfici piatte separate da hairline, mai da ombre.
 - Movimento breve e localizzato: il numero entra, il resto non si muove.
 
 ## Colors
 
-Palette ristretta: un verde acqua che lavora, un grigio scuro che tiene il tavolo e due neutri di servizio. Chiaro e scuro non sono inversioni meccaniche: il tema scuro alza l'accento a un mint più luminoso per conservare la stessa gerarchia in penombra.
+Palette ristretta: un verde acqua che lavora, un grigio scuro che tiene il tavolo e due neutri di servizio. Chiaro e scuro non sono inversioni meccaniche: il tema scuro alza l'accento a un mint più luminoso per conservare la stessa gerarchia in penombra. Il tema Natale sostituisce il verde acqua con l'oro e il grigio con il pino, mantenendo gli stessi ruoli.
 
 ### Primary
 - **Verde acqua da tavolo** (#0d766e): accento del tema chiaro. Riempie i numeri estratti, l'ultimo numero, il pulsante principale, la barra di avanzamento e il focus. È l'unico colore che indica un cambiamento di stato.
@@ -172,10 +192,20 @@ Palette ristretta: un verde acqua che lavora, un grigio scuro che tiene il tavol
 - **Cella notte** (#1e2526), **inchiostro notte** (#f2f3ec), **nebbia notte** (#a4aeaa): gli stessi ruoli nel tema scuro.
 - **Rosso segnale** (#b42318, #e5484d): riservato alla conferma di azzeramento, mai al gioco.
 
-### Named Rules
-**La regola del segno.** Il verde acqua compare solo dove lo stato è cambiato o dove si compie l'azione: celle estratte, ultimo numero, pulsante principale, avanzamento, focus. Non è mai decorazione, sfondo o titolo.
+### Christmas
+Il tema Natale è una palette scura completa, non una decorazione applicata sopra il tema scuro.
+- **Notte di pino** (#0c1711): fondo.
+- **Superficie di pino** (#122118) e **pino rialzato** (#1a2c20): pannelli, controlli, celle.
+- **Inchiostro crema** (#f4eddc): testo principale; **nebbia di pino** (#b7bea9): testo secondario.
+- **Oro dell'albero** (#e8c375): accento operativo, lo stesso ruolo del verde acqua; **oro di scena** (#f0cc7a) per il numero estratto.
+- **Rosso di Babbo Natale** (#c7352c): solo nel cappello illustrato dell'intestazione. Non entra mai nell'interfaccia.
 
-**La regola del rosso.** Il rosso non descrive mai un numero o una fase della partita; esiste solo per l'azione irreversibile.
+### Named Rules
+**La regola del segno.** L'accento compare solo dove lo stato è cambiato o dove si compie l'azione: celle estratte, ultimo numero, pulsante principale, avanzamento, focus. Non è mai decorazione, sfondo o titolo.
+
+**La regola del rosso.** Il rosso non descrive mai un numero o una fase della partita; esiste solo per l'azione irreversibile. L'unica eccezione è il cappello di Natale, che è un'illustrazione decorativa e nascosta alle tecnologie assistive.
+
+**La regola del Natale.** Nel tema Natale l'oro prende il posto del verde acqua e il pino prende il posto del grigio; la gerarchia, le dimensioni e i movimenti restano identici. Neve, cappello e stella sono dettagli statici e piccoli: niente animazioni festive, niente rosso nell'interfaccia.
 
 ## Typography
 
@@ -186,6 +216,7 @@ Palette ristretta: un verde acqua che lavora, un grigio scuro che tiene il tavol
 
 ### Hierarchy
 - **Display** (800, `clamp(104px, 9.6vw, 142px)`, 0.78): solo il numero dell'ultima estrazione. È il punto focale assoluto.
+- **Name** (700, `clamp(18px, 1.55vw, 22px)`, 1.2, -0.02em): nome tradizionale sotto il numero. Massimo 30ch, centrato su desktop e telefono, allineato a sinistra con il numero su tablet.
 - **Headline** (800, `clamp(26px, 2.2vw, 34px)`, 1.06, -0.032em): titolo della pagina. Una riga quando lo spazio lo consente.
 - **Title** (800, 24px, 1.1, -0.03em): titolo del drawer delle impostazioni.
 - **Body** (400, 16px, 1.45): introduzione, stato della partita, testo dei dialoghi. Misura massima 64ch.
@@ -210,7 +241,7 @@ Nessuna ombra. La profondità è tonale: fondo, superficie e superficie rialzata
 
 ## Shapes
 
-Angoli morbidi ma non arrotondati per gioco: 8px per le celle, 10px per i controlli, 12px per i pulsanti e le scelte, 16px per i pannelli, 20px per il drawer su desktop e 18px per il foglio mobile. I bordi sono sempre da 1px; le forme completamente tonde sono riservate a barra di avanzamento, indicatori radio e campioni colore. Non ci sono angoli tagliati, clip-path o cornici decorative.
+Angoli morbidi ma non arrotondati per gioco: 8px per le celle, 10px per i controlli, 12px per i pulsanti e le scelte, 16px per i pannelli, 20px per il drawer su desktop e 18px per il foglio mobile. I bordi sono sempre da 1px; le forme completamente tonde sono riservate a barra di avanzamento, indicatori radio, campioni colore e interruttori. Non ci sono angoli tagliati o cornici decorative; l'unico clip-path è la stella a quattro punte dell'ultimo numero nel tema Natale.
 
 ## Components
 
@@ -222,16 +253,24 @@ Angoli morbidi ma non arrotondati per gioco: 8px per le celle, 10px per i contro
 - **Text:** solo testo con icona, per "Ricomincia"; hover su superficie rialzata.
 
 ### Choices
-- **Style:** schede selezionabili con bordo 1px, fondo rialzato e raggio 12px. La lingua è una griglia 2 × 2; il colore è una riga da tre.
-- **State:** selezionata = bordo verde acqua, fondo verde tenue, indicatore a spunta pieno. Il focus arriva sul corpo della scheda, non sull'input nascosto.
+- **Style:** schede selezionabili con bordo 1px, fondo rialzato e raggio 12px. La lingua è una griglia 2 × 2; il colore è una riga da quattro, che diventa 2 × 2 sotto i 640px.
+- **State:** selezionata = bordo dell'accento, fondo accento tenue, indicatore a spunta pieno. Il focus arriva sul corpo della scheda, non sull'input nascosto.
+- **Names toggle:** una riga con testo e interruttore da 44 × 26px; accesa = bordo e fondo accento tenue, pomello nell'inchiostro dell'accento. L'intero blocco è cliccabile.
 
 ### Board cells
-- **Style:** rettangoli da 8px, fondo bianco (chiaro) o cella notte (scuro), testo nebbia. Estratto = fondo verde acqua, testo quasi bianco. L'ultimo estratto porta un punto da 4px nell'angolo.
+- **Style:** rettangoli da 8px, fondo bianco (chiaro), cella notte (scuro) o cella pino (Natale), testo nebbia. Estratto = fondo accento, testo quasi bianco. L'ultimo estratto porta un punto da 4px nell'angolo; nel tema Natale diventa una stella a quattro punte oro.
 - **State:** l'animazione di estrazione è uno "stamp" di 480ms con scala 0.84 → 1.045 → 1; nessun altro movimento.
 
 ### Stage and history
-- **Stage:** pannello superficie con titolo, numero enorme, stato e pulsante. Il numero vuoto è uno 0 grigio al 42% di opacità.
-- **History:** pannello superficie con chip da 42px; il più recente è verde acqua, gli altri sono hairline. Massimo 12 chip, il resto resta nel tabellone.
+- **Stage:** pannello superficie con titolo, numero enorme, nome opzionale, stato e pulsante. Il numero vuoto è uno 0 grigio al 42% di opacità.
+- **Names:** quando l'interruttore è acceso, il nome tradizionale compare sotto il numero, centrato e in inchiostro pieno. Lo stesso nome alimenta `title` e `aria-label` di celle e chip, e l'annuncio della live region.
+- **History:** pannello superficie con chip da 42px; il più recente è accento, gli altri sono hairline. Massimo 12 chip, il resto resta nel tabellone.
+
+### Christmas details
+- **Hat:** un SVG da 21 × 18px appoggiato in alto a destra sul marchio nell'intestazione, visibile solo nel tema Natale. Rosso e avorio, fermo, `aria-hidden`.
+- **Snow:** due fiocchi SVG statici nel fondo della pagina, uno per angolo, al 7% di opacità. Non coprono pannelli né testo e non si animano.
+- **Star:** la stella a quattro punte nell'angolo della cella più recente usa l'oro dell'albero; resta un dettaglio, mai un secondo accento.
+- **Swatch:** il campione del tema Natale è un piccolo ornamento pino/oro nel selettore, così il tema si riconosce prima di applicarlo.
 - **Progress:** barra da 3px, fondo hairline, riempimento verde acqua; nessun numero sopra.
 
 ### Dialogs
@@ -246,6 +285,8 @@ Angoli morbidi ma non arrotondati per gioco: 8px per le celle, 10px per i contro
 - **Do** usare una hairline da 1px e i toni di superficie per separare i pannelli.
 - **Do** mantenere il pulsante principale nell'ultima riga della scena, con altezza 56px e larghezza piena.
 - **Do** usare cifre tabulari e due cifre nel tabellone (01–90).
+- **Do** mostrare il nome napoletano come seconda riga, più piccola del numero e più grande dello stato.
+- **Do** tenere i dettagli natalizi piccoli, statici e fuori dal contenuto informativo.
 - **Do** rispettare `prefers-reduced-motion` eliminando animazioni e transizioni.
 
 ### Don't:
@@ -253,5 +294,6 @@ Angoli morbidi ma non arrotondati per gioco: 8px per le celle, 10px per i contro
 - **Don't** usare il verde acqua per titoli, sfondi di sezione o decorazioni.
 - **Don't** introdurre una seconda famiglia tipografica o testo in maiuscolo spaziato come etichetta.
 - **Don't** spostare il tabellone sotto la piega o nasconderlo dietro un tab.
-- **Don't** usare il rosso per i numeri, i punteggi o lo stato della partita.
+- **Don't** usare il rosso per i numeri, i punteggi o lo stato della partita. Nel tema Natale il rosso resta confinato al cappello illustrato.
+- **Don't** animare la neve, far cadere coriandoli o aggiungere suoni natalizi.
 - **Don't** trasformare la cronologia in una lista lunga: dodici chip sono il limite.
