@@ -1,6 +1,6 @@
 ---
-name: Tombola
-description: Tabellone digitale da tavolo per estrarre i 90 numeri della tombola
+name: Bingo
+description: Tabellone digitale da tavolo per estrarre i 90 numeri del bingo
 colors:
   table-teal: "#0d766e"
   table-teal-deep: "#095e58"
@@ -165,7 +165,7 @@ components:
     rounded: "{rounded.sheet}"
 ---
 
-# Design System: Tombola
+# Design System: Bingo
 
 ## Overview
 

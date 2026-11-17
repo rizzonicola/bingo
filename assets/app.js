@@ -2,6 +2,7 @@
   'use strict';
 
   const TOTAL = 90;
+  // Legacy keys: renaming them would discard saved games and preferences.
   const STATE_KEY = 'tombola.state.v1';
   const PREFS_KEY = 'tombola.prefs.v1';
   const LANGUAGES = ['it', 'en', 'fr'];
@@ -110,13 +111,13 @@
 
   const COPY = {
     it: {
-      docTitle: 'Tombola: tabellone digitale da 1 a 90',
-      docDescription: "Estrai i numeri della tombola uno alla volta, vedi l'ultimo estratto in grande e tieni traccia di tutti i numeri usciti. La partita resta salvata sul dispositivo.",
-      ogTitle: 'Tombola: tabellone digitale da 1 a 90',
+      docTitle: 'Bingo: tabellone digitale da 1 a 90',
+      docDescription: "Estrai i numeri del bingo uno alla volta, vedi l'ultimo estratto in grande e tieni traccia di tutti i numeri usciti. La partita resta salvata sul dispositivo.",
+      ogTitle: 'Bingo: tabellone digitale da 1 a 90',
       ogDescription: 'Estrai i numeri uno alla volta, vedi l\'ultimo in grande e tieni traccia di tutti quelli usciti.',
       skip: 'Vai al tabellone',
       settings: 'Impostazioni',
-      title: 'Tabellone della tombola',
+      title: 'Tabellone del bingo',
       intro: 'Estrai i numeri da 1 a 90, uno alla volta. I numeri già usciti restano segnati.',
       drawnLabel: 'estratti',
       progressLabel: 'Numeri estratti',
@@ -169,13 +170,13 @@
       resetAnnounce: 'Tabellone azzerato. I 90 numeri sono di nuovo disponibili.',
     },
     en: {
-      docTitle: 'Tombola: digital board from 1 to 90',
-      docDescription: 'Draw tombola numbers one at a time, see the latest number large, and keep track of every number called. Your game is saved on this device.',
-      ogTitle: 'Tombola: digital board from 1 to 90',
+      docTitle: 'Bingo: digital board from 1 to 90',
+      docDescription: 'Draw bingo numbers one at a time, see the latest number large, and keep track of every number called. Your game is saved on this device.',
+      ogTitle: 'Bingo: digital board from 1 to 90',
       ogDescription: 'Draw numbers one at a time, see the latest one large, and keep track of every number called.',
       skip: 'Skip to the board',
       settings: 'Settings',
-      title: 'Tombola board',
+      title: 'Bingo board',
       intro: 'Draw the numbers from 1 to 90, one at a time. Every number that comes out stays marked.',
       drawnLabel: 'drawn',
       progressLabel: 'Numbers drawn',
@@ -228,13 +229,13 @@
       resetAnnounce: 'Board cleared. All 90 numbers are available again.',
     },
     fr: {
-      docTitle: 'Tombola : tableau numérique de 1 à 90',
-      docDescription: 'Tirez les numéros de tombola un par un, voyez le dernier numéro en grand et gardez la trace de tous les numéros sortis. La partie est sauvegardée sur cet appareil.',
-      ogTitle: 'Tombola : tableau numérique de 1 à 90',
+      docTitle: 'Bingo : tableau numérique de 1 à 90',
+      docDescription: 'Tirez les numéros de bingo un par un, voyez le dernier numéro en grand et gardez la trace de tous les numéros sortis. La partie est sauvegardée sur cet appareil.',
+      ogTitle: 'Bingo : tableau numérique de 1 à 90',
       ogDescription: 'Tirez les numéros un par un, voyez le dernier en grand et gardez la trace de tous les numéros sortis.',
       skip: 'Aller au tableau',
       settings: 'Réglages',
-      title: 'Tableau de tombola',
+      title: 'Tableau de bingo',
       intro: 'Tirez les numéros de 1 à 90, un par un. Chaque numéro sorti reste marqué.',
       drawnLabel: 'tirés',
       progressLabel: 'Numéros tirés',
@@ -714,7 +715,7 @@
 
   function storageAvailable() {
     try {
-      const key = 'tombola.test.v1';
+      const key = 'bingo.test.v1';
       localStorage.setItem(key, '1');
       localStorage.removeItem(key);
       return true;

@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tombola: tabellone digitale da 1 a 90</title>
-<meta name="description" content="Estrai i numeri della tombola uno alla volta, vedi l'ultimo estratto in grande e tieni traccia di tutti i numeri usciti. La partita resta salvata sul dispositivo.">
+<title>Bingo: tabellone digitale da 1 a 90</title>
+<meta name="description" content="Estrai i numeri del bingo uno alla volta, vedi l'ultimo estratto in grande e tieni traccia di tutti i numeri usciti. La partita resta salvata sul dispositivo.">
 <meta name="page-type" content="software">
 <meta name="site-kind" content="software">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#121617" id="theme-color">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Tombola: tabellone digitale da 1 a 90">
+<meta property="og:title" content="Bingo: tabellone digitale da 1 a 90">
 <meta property="og:description" content="Estrai i numeri uno alla volta, vedi l'ultimo in grande e tieni traccia di tutti quelli usciti.">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -24,6 +24,7 @@
     const root = document.documentElement;
     root.classList.replace('no-js', 'js');
     let prefs = {};
+    // Legacy key kept so existing preferences survive the rebrand.
     try { prefs = JSON.parse(localStorage.getItem('tombola.prefs.v1') || '{}') || {}; } catch (error) {}
     const colors = {
       light: '#e8ece7',
@@ -47,7 +48,7 @@
 
 <div class="app">
   <header class="topbar">
-    <a class="brand" href="./" aria-label="Tombola">
+    <a class="brand" href="./" aria-label="Bingo">
       <span class="brand__mark" aria-hidden="true">
         <svg class="brand__glyph" viewBox="0 0 256 256" focusable="false">
           <g fill="currentColor">
@@ -63,7 +64,7 @@
           <circle cx="43" cy="9" r="5" fill="#f8f3e7"/>
         </svg>
       </span>
-      <span class="brand__word">tombola</span>
+      <span class="brand__word">bingo</span>
     </a>
     <button class="settings-button" type="button" id="open-settings" aria-haspopup="dialog">
       <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -78,7 +79,7 @@
   <main id="main">
     <header class="page-head">
       <div class="page-head__copy">
-        <h1 data-i18n="title">Tabellone della tombola</h1>
+        <h1 data-i18n="title">Tabellone del bingo</h1>
         <p class="page-head__intro" data-i18n="intro">Estrai i numeri da 1 a 90, uno alla volta. I numeri già usciti restano segnati.</p>
       </div>
       <p class="tally" aria-hidden="true">
@@ -147,7 +148,7 @@
   </main>
 
   <footer class="foot">
-    <p><span class="foot__brand">Tombola</span> <span class="foot__sep" aria-hidden="true">·</span> <span data-i18n="numbers">Numeri da 1 a 90</span></p>
+    <p><span class="foot__brand">Bingo</span> <span class="foot__sep" aria-hidden="true">·</span> <span data-i18n="numbers">Numeri da 1 a 90</span></p>
     <p class="shortcut"><kbd data-i18n="spaceKey">Spazio</kbd> <span data-i18n="shortcut">per estrarre</span></p>
   </footer>
 </div>

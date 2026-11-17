@@ -1,7 +1,7 @@
 {
-  "name": "Tombola",
-  "short_name": "Tombola",
-  "description": "Tabellone digitale per estrarre i numeri della tombola da 1 a 90.",
+  "name": "Bingo",
+  "short_name": "Bingo",
+  "description": "Tabellone digitale per estrarre i numeri del bingo da 1 a 90.",
   "lang": "it",
   "dir": "ltr",
   "start_url": "./",
@@ -29,7 +29,7 @@
       "purpose": "maskable"
     },
     {
-      "src": "assets/icons/tombola-app-icon.svg",
+      "src": "assets/icons/bingo-app-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

@@ -1,6 +1,6 @@
-# Tombola
+# Bingo
 
-Tabellone digitale da 1 a 90 per una serata di tombola in famiglia o con amici. Estrae un numero alla volta, tiene l'ultimo in grande e mostra sempre tutti i numeri già usciti.
+Tabellone digitale da 1 a 90 per una serata di bingo in famiglia o con amici. Estrae un numero alla volta, tiene l'ultimo in grande e mostra sempre tutti i numeri già usciti.
 
 Apri `index.html` in un browser, oppure servi la cartella con un server statico:
 
@@ -36,4 +36,4 @@ PRODUCT.md            verità di prodotto e assunzioni
 DESIGN.md             sistema visivo e regole di interfaccia
 ```
 
-Lo stato della partita è in `tombola.state.v1`; le preferenze in `tombola.prefs.v1`.
+Lo stato della partita è in `tombola.state.v1`; le preferenze in `tombola.prefs.v1`. Le chiavi conservano il vecchio nome per non perdere le partite già salvate.

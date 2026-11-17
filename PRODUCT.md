@@ -12,7 +12,7 @@ delegated: static HTML, CSS and JavaScript, no build step and no runtime depende
 
 ## Users
 
-Chi organizza una serata di tombola in famiglia o con amici: tiene il portatile o il tablet sul tavolo, davanti ai giocatori, e chiama i numeri uno alla volta. I giocatori guardano lo schermo da una certa distanza e devono riconoscere subito l'ultimo numero uscito e quelli già estratti.
+Chi organizza una serata di bingo in famiglia o con amici: tiene il portatile o il tablet sul tavolo, davanti ai giocatori, e chiama i numeri uno alla volta. I giocatori guardano lo schermo da una certa distanza e devono riconoscere subito l'ultimo numero uscito e quelli già estratti.
 
 ## Product Purpose
 
@@ -44,7 +44,7 @@ Nessuna registrazione, nessuna cartella da generare, nessun contorno da sala da 
 
 ## Brand Commitments
 
-- Nome di lavoro: Tombola (assunto; nessun marchio fornito).
+- Nome di lavoro: Bingo (assunto; nessun marchio fornito).
 - Colori richiesti e vincolanti: verde acqua come accento operativo e grigio scuro come base nei temi standard; le varianti Natale sono eccezioni festive documentate in `DESIGN.md`.
 - Niente estetica da sala bingo, casinò o festa per bambini: è uno strumento da tavolo, non un gioco d'azzardo.
 
