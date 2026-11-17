@@ -9,7 +9,6 @@
   const CARD_H = 228;
   const HEADER_H = 30;
   const TABLE_H = 180;
-  const FOOTER_H = 18;
   const CARDS_PER_PAGE = 3;
   const COL_W = CARD_W / 9;
   const ROW_H = TABLE_H / 3;

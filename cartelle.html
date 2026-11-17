@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="it" class="no-js" data-type="software" data-radius="soft" data-buttons="solid">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cartelle · Bingo</title>
+<meta name="description" content="Genera e stampa le cartelle del bingo, poi chiama i numeri e segui i premi. Le cartelle non distribuite restano fuori dal gioco.">
+<meta name="page-type" content="software">
+<meta name="site-kind" content="software">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#121617" id="theme-color">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cartelle · Bingo">
+<meta property="og:description" content="Genera le cartelle, scarica il PDF e segui i premi mentre chiami i numeri.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preload" href="assets/fonts/gabarito-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/cartelle.css">
+<script>
+  (() => {
+    const root = document.documentElement;
+    root.classList.replace('no-js', 'js');
+    let prefs = {};
+    // Legacy key kept so existing preferences survive the rebrand.
+    try { prefs = JSON.parse(localStorage.getItem('tombola.prefs.v1') || '{}') || {}; } catch (error) {}
+    const colors = {
+      light: '#e8ece7',
+      dark: '#121617',
+      christmas: '#0c1711',
+      'christmas-light': '#f1e8d8',
+      'christmas-red': '#1b0c0d',
+    };
+    const theme = Object.hasOwn(colors, prefs.theme)
+      ? prefs.theme
+      : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    root.dataset.theme = theme;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = colors[theme];
+  })();
+</script>
+<script src="assets/names.js" defer></script>
+<script src="assets/cards.js" defer></script>
+<script src="assets/prizes.js" defer></script>
+<script src="assets/pdf.js" defer></script>
+<script src="assets/cartelle.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="skip">Vai alle cartelle</a>
+
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Bingo">
+      <span class="brand__mark" aria-hidden="true">
+        <svg class="brand__glyph" viewBox="0 0 256 256" focusable="false">
+          <g fill="currentColor">
+            <rect x="30" y="30" width="80" height="80" rx="21"/>
+            <rect x="130" y="30" width="80" height="80" rx="21"/>
+            <rect x="30" y="130" width="80" height="80" rx="21"/>
+            <circle cx="178" cy="178" r="48"/>
+          </g>
+        </svg>
+        <svg class="brand__hat" viewBox="0 0 48 40" focusable="false">
+          <path d="M7 31C5 19 13 7 25 5c7-1.2 12 1 15 5 2 2.8 1.5 6-1 7.5-2.5 1.5-5.5.5-7-2-2.2-3.7-6.2-5-10.5-4-6.5 1.5-10 8.5-9 18.5Z" fill="#c7352c" stroke="#f8f3e7" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="4" y="29" width="36" height="9" rx="4.5" fill="#f8f3e7"/>
+          <circle cx="43" cy="9" r="5" fill="#f8f3e7"/>
+        </svg>
+      </span>
+      <span class="brand__word">bingo</span>
+    </a>
+    <div class="topbar__actions">
+      <a class="mode-link" href="./" data-i18n-aria="boardLink" aria-label="Torna al tabellone">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3.5" y="3.5" width="17" height="17" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M9.2 3.5v17M14.8 3.5v17M3.5 9.2h17M3.5 14.8h17" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        </svg>
+        <span data-i18n="board">Tabellone</span>
+      </a>
+      <button class="settings-button" type="button" id="open-settings" aria-haspopup="dialog" data-i18n-aria="settings">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h6M15 7h5M4 17h3M12 17h8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          <circle cx="12.5" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          <circle cx="9.5" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        </svg>
+        <span data-i18n="settings">Impostazioni</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <header class="page-head">
+      <div class="page-head__copy">
+        <h1 id="page-title">Prepara le cartelle</h1>
+        <p class="page-head__intro" id="page-intro">Scegli quante cartelle servono, scarica il PDF e stampalo. Poi chiama i numeri da questa schermata.</p>
+      </div>
+      <div class="page-head__tools" id="page-tools" hidden>
+        <p class="tally" aria-hidden="true">
+          <strong id="drawn-count">0</strong><span class="tally__total">/ 90</span>
+          <span class="tally__label" data-i18n="drawnLabel">estratti</span>
+        </p>
+        <button class="settings-button cards-trigger" type="button" id="open-cards" aria-haspopup="dialog">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3.5" y="3.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.7"/>
+            <rect x="13.5" y="3.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.7"/>
+            <rect x="3.5" y="13.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.7"/>
+            <rect x="13.5" y="13.5" width="7" height="7" rx="1.6" fill="currentColor"/>
+          </svg>
+          <span id="cards-button-label">Cartelle · 0 attive</span>
+        </button>
+      </div>
+      <div class="progress" id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="90" aria-valuenow="0" aria-label="Numeri estratti" data-i18n-aria="progressLabel" hidden>
+        <span class="progress__fill" id="progress-fill"></span>
+      </div>
+    </header>
+
+    <section class="setup" id="setup-view" aria-labelledby="page-title">
+      <form class="setup-panel" id="setup-form" novalidate>
+        <div class="setup-fields">
+          <div class="field setup-count">
+            <label class="field-label" for="card-count" data-i18n="count">Numero di cartelle</label>
+            <div class="stepper">
+              <button class="stepper__button" type="button" id="count-minus" data-i18n-aria="countMinus" aria-label="Una cartella in meno">−</button>
+              <input class="stepper__input" id="card-count" name="count" type="number" inputmode="numeric" min="1" max="100" step="1" value="12" aria-describedby="count-hint">
+              <button class="stepper__button" type="button" id="count-plus" data-i18n-aria="countPlus" aria-label="Una cartella in più">+</button>
+            </div>
+            <p class="field-hint" id="count-hint" data-i18n="countHint" hidden>Da 1 a 100.</p>
+          </div>
+
+          <fieldset class="field setup-theme">
+            <legend class="field-label" data-i18n="cardTheme">Tema delle cartelle</legend>
+            <p class="field-hint field-hint--top" data-i18n="pdfOnly">Solo per il PDF.</p>
+            <div class="theme-cards" id="theme-choices"></div>
+          </fieldset>
+        </div>
+
+        <button class="btn-draw setup-download" type="submit" id="download-button">
+          <svg class="btn-draw__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M4.5 17.5v1.2a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-1.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span data-i18n="download">Scarica il PDF</span>
+        </button>
+        <p class="setup-note" data-i18n="setupNote">PDF A4 · 3 cartelle per pagina. Il PDF si scarica subito; poi si gioca da qui.</p>
+        <p class="field-error setup-error" id="setup-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <section class="cartelle-game" id="game-view" hidden>
+      <section class="board-panel" aria-labelledby="board-title">
+        <h2 class="sr-only" id="board-title" data-i18n="boardTitle">Numeri da 1 a 90</h2>
+        <ol class="board" id="board" aria-label="Tabellone dei numeri da 1 a 90" data-i18n-aria="boardLabel"></ol>
+      </section>
+
+      <div class="cartelle-rail">
+        <section class="stage" aria-labelledby="stage-title">
+          <div class="stage__head">
+            <h2 id="stage-title" data-i18n="lastDraw">Ultima estrazione</h2>
+            <p class="stage__draw-count" id="stage-ordinal" hidden></p>
+          </div>
+          <div class="stage__number-wrap">
+            <p class="stage__number is-empty" id="last-number" aria-hidden="true">0</p>
+            <p class="stage__name" id="last-name" aria-hidden="true" hidden></p>
+            <p class="sr-only" id="last-number-sr"></p>
+          </div>
+          <p class="stage__status" id="stage-status" data-i18n="noDraw">Nessun numero estratto.</p>
+          <div class="stage__actions">
+            <button class="btn-draw" type="button" id="draw-button">
+              <svg class="btn-draw__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                <circle cx="8.3" cy="8.3" r="1.35" fill="currentColor"/>
+                <circle cx="15.7" cy="8.3" r="1.35" fill="currentColor"/>
+                <circle cx="12" cy="12" r="1.35" fill="currentColor"/>
+                <circle cx="8.3" cy="15.7" r="1.35" fill="currentColor"/>
+                <circle cx="15.7" cy="15.7" r="1.35" fill="currentColor"/>
+              </svg>
+              <span data-i18n="draw">Estrai un numero</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="prizes prizes--latest" aria-labelledby="latest-title">
+          <div class="prizes__head">
+            <h2 id="latest-title" data-i18n="latestPrizes">Premi di questa estrazione</h2>
+            <p class="prizes__meta" id="latest-meta" hidden></p>
+          </div>
+          <p class="prizes__notice" id="no-active-notice" data-i18n="noActive" hidden>Nessuna cartella attiva: i premi non verranno cercati.</p>
+          <p class="prizes__empty" id="latest-empty" data-i18n="latestBefore">I premi compaiono dopo la prima estrazione.</p>
+          <div class="prize-groups" id="latest-groups" hidden></div>
+        </section>
+
+        <section class="prizes prizes--previous" aria-labelledby="previous-title">
+          <div class="prizes__head">
+            <h2 id="previous-title" data-i18n="previousPrizes">Premi precedenti</h2>
+            <button class="text-button" type="button" id="reset-button" hidden>
+              <svg class="icon icon--small" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 11a8 8 0 1 0-2.4 6.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M20 4.5V11h-6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span data-i18n="restart">Ricomincia</span>
+            </button>
+          </div>
+          <p class="prizes__empty" id="previous-empty" data-i18n="previousEmpty">Le estrazioni con premi compaiono qui.</p>
+          <ol class="prize-log" id="previous-list" hidden></ol>
+          <p class="history__saved">
+            <svg class="icon icon--tiny" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span id="saved-label" data-i18n="saved">Salvato su questo dispositivo.</span>
+          </p>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p><span class="foot__brand">Bingo</span> <span class="foot__sep" aria-hidden="true">·</span> <span data-i18n="numbers">Numeri da 1 a 90</span></p>
+    <p class="shortcut"><kbd data-i18n="spaceKey">Spazio</kbd> <span data-i18n="shortcut">per estrarre</span></p>
+  </footer>
+</div>
+
+<p class="sr-only" id="live-region" aria-live="polite"></p>
+
+<dialog class="drawer cards-drawer" id="cards-dialog" aria-labelledby="cards-title" aria-describedby="cards-lede">
+  <div class="drawer__panel">
+    <header class="drawer__head">
+      <h2 id="cards-title" data-i18n="cardsTitle">Cartelle</h2>
+      <button class="icon-button" type="button" data-close aria-label="Chiudi" data-i18n-aria="close">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </header>
+    <p class="drawer__lede" id="cards-lede" data-i18n="cardsLede">Disattiva le cartelle che non hai distribuito: i premi vengono cercati solo tra quelle attive.</p>
+
+    <p class="cards-summary" id="cards-summary"></p>
+
+    <div class="setting cards-range">
+      <label class="field-label" for="range-input" data-i18n="ranges">Intervalli</label>
+      <p class="field-hint field-hint--top" id="range-hint" data-i18n="rangeHint">Per esempio 8-20, 27</p>
+      <div class="range-row">
+        <input class="range-input" id="range-input" type="text" inputmode="numeric" autocomplete="off" aria-describedby="range-hint range-error">
+        <button class="btn-secondary" type="button" id="disable-range" data-i18n="disable">Disattiva</button>
+        <button class="btn-secondary" type="button" id="enable-range" data-i18n="enable">Riattiva</button>
+      </div>
+      <p class="field-error" id="range-error" role="alert" hidden></p>
+    </div>
+
+    <div class="cards-grid" id="cards-grid" role="group" aria-label="Scegli le cartelle attive" data-i18n-aria="cardsGridLabel"></div>
+    <p class="cards-legend" data-i18n="cardsLegend">Piena: attiva. Tratteggiata: non distribuita.</p>
+    <p class="field-error" id="cards-error" role="alert" hidden></p>
+
+    <div class="drawer__foot cards-drawer__foot">
+      <div class="cards-drawer__utils">
+        <button class="btn-secondary" type="button" id="redownload-button" data-i18n="redownload">Scarica di nuovo il PDF</button>
+        <button class="text-button text-button--danger" type="button" id="new-cards-button" data-i18n="newCards">Nuove cartelle</button>
+      </div>
+      <button class="btn-secondary btn-secondary--wide" type="button" data-close data-i18n="done">Fatto</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="drawer" id="settings-dialog" aria-labelledby="settings-title" aria-describedby="settings-lede">
+  <div class="drawer__panel">
+    <header class="drawer__head">
+      <h2 id="settings-title" data-i18n="settings">Impostazioni</h2>
+      <button class="icon-button" type="button" data-close aria-label="Chiudi" data-i18n-aria="close">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </header>
+    <p class="drawer__lede" id="settings-lede" data-i18n="settingsLede">La lingua, i nomi e il colore si cambiano quando vuoi. Le modifiche restano su questo dispositivo.</p>
+
+    <fieldset class="setting">
+      <legend data-i18n="language">Lingua</legend>
+      <div class="choices choices--language">
+        <label class="choice">
+          <input class="sr-only" type="radio" name="language" value="system">
+          <span class="choice__body">
+            <span class="choice__badge" aria-hidden="true">
+              <svg class="icon" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/>
+                <path d="M8 21h8M12 17v4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="choice__label">
+              <span data-i18n="system">Sistema</span>
+              <small id="detected-language">Italiano</small>
+            </span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="choice">
+          <input class="sr-only" type="radio" name="language" value="it">
+          <span class="choice__body">
+            <span class="choice__badge" aria-hidden="true">IT</span>
+            <span class="choice__label">Italiano</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="choice">
+          <input class="sr-only" type="radio" name="language" value="en">
+          <span class="choice__body">
+            <span class="choice__badge" aria-hidden="true">EN</span>
+            <span class="choice__label">English</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="choice">
+          <input class="sr-only" type="radio" name="language" value="fr">
+          <span class="choice__body">
+            <span class="choice__badge" aria-hidden="true">FR</span>
+            <span class="choice__label">Français</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+      </div>
+    </fieldset>
+
+    <fieldset class="setting">
+      <legend data-i18n="names">Nomi napoletani</legend>
+      <label class="toggle">
+        <input class="sr-only" type="checkbox" id="neapolitan-names" aria-labelledby="names-toggle-label" aria-describedby="names-toggle-hint">
+        <span class="toggle__body">
+          <span class="toggle__copy">
+            <span class="toggle__label" id="names-toggle-label" data-i18n="namesToggle">Mostra il nome tradizionale</span>
+            <small id="names-toggle-hint" data-i18n="namesHint">Sotto il numero compare il nome tradizionale napoletano.</small>
+          </span>
+          <span class="toggle__switch" aria-hidden="true">
+            <span class="toggle__thumb"></span>
+          </span>
+        </span>
+      </label>
+    </fieldset>
+
+    <fieldset class="setting">
+      <legend data-i18n="color">Colore</legend>
+      <div class="choices choices--theme">
+        <label class="choice">
+          <input class="sr-only" type="radio" name="theme" value="system">
+          <span class="choice__body choice__body--stacked">
+            <span class="swatch swatch--system" aria-hidden="true"></span>
+            <span class="choice__label" data-i18n="system">Sistema</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="choice">
+          <input class="sr-only" type="radio" name="theme" value="light">
+          <span class="choice__body choice__body--stacked">
+            <span class="swatch swatch--light" aria-hidden="true"></span>
+            <span class="choice__label" data-i18n="light">Chiaro</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="choice">
+          <input class="sr-only" type="radio" name="theme" value="dark">
+          <span class="choice__body choice__body--stacked">
+            <span class="swatch swatch--dark" aria-hidden="true"></span>
+            <span class="choice__label" data-i18n="dark">Scuro</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="choice">
+          <input class="sr-only" type="radio" name="theme" value="christmas">
+          <span class="choice__body choice__body--stacked">
+            <span class="swatch swatch--xmas" aria-hidden="true"></span>
+            <span class="choice__label" data-i18n="christmas">Natale</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="choice">
+          <input class="sr-only" type="radio" name="theme" value="christmas-light">
+          <span class="choice__body choice__body--stacked">
+            <span class="swatch swatch--xmas-light" aria-hidden="true"></span>
+            <span class="choice__label" data-i18n="christmasLight">Crema</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="choice">
+          <input class="sr-only" type="radio" name="theme" value="christmas-red">
+          <span class="choice__body choice__body--stacked">
+            <span class="swatch swatch--xmas-red" aria-hidden="true"></span>
+            <span class="choice__label" data-i18n="christmasRed">Rosso</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="drawer__foot">
+      <button class="btn-secondary btn-secondary--wide" type="button" data-close data-i18n="done">Fatto</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="confirm" id="reset-dialog" role="alertdialog" aria-labelledby="reset-title" aria-describedby="reset-body">
+  <form method="dialog">
+    <h2 id="reset-title" data-i18n="resetTitle">Ricominciare da capo?</h2>
+    <p class="confirm__body" id="reset-body" data-i18n="resetBody">Tutti i numeri tornano disponibili e i premi si azzerano. Le cartelle restano le stesse.</p>
+    <div class="confirm__actions">
+      <button class="btn-secondary" value="cancel" data-i18n="cancel">Annulla</button>
+      <button class="btn-danger" value="confirm" id="confirm-reset" data-i18n="restart">Ricomincia</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="confirm" id="new-cards-dialog" role="alertdialog" aria-labelledby="new-cards-title" aria-describedby="new-cards-body">
+  <form method="dialog">
+    <h2 id="new-cards-title" data-i18n="newCardsTitle">Generare nuove cartelle?</h2>
+    <p class="confirm__body" id="new-cards-body" data-i18n="newCardsBody">La partita in corso e le cartelle attuali vengono eliminate. Le cartelle già stampate non saranno più valide.</p>
+    <div class="confirm__actions">
+      <button class="btn-secondary" value="cancel" data-i18n="cancel">Annulla</button>
+      <button class="btn-danger" value="confirm" id="confirm-new-cards" data-i18n="newCardsConfirm">Genera nuove cartelle</button>
+    </div>
+  </form>
+</dialog>
+
+<noscript><p class="noscript noscript--fixed">Per generare le cartelle serve JavaScript.</p></noscript>
+</body>
+</html>

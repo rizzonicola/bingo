@@ -1,6 +1,6 @@
 # Cartelle Mode — Design
 
-- **Status:** proposed, awaiting approval
+- **Status:** approved 2026-11-17
 - **Date:** 2026-11-17
 - **Project:** Bingo (`/root/progetti/bingo`)
 - **Companion documents:** `PRODUCT.md`, `DESIGN.md`, `README.md`
@@ -330,9 +330,10 @@ One full-width surface panel under the page head. Inside:
   in the latest panel, so a prize is never listed twice.
 - The list scrolls; all of the game's prize draws are kept. On phones the list
   has a max-height of about 340px. The reset button stays in the header.
-- Empty: “I premi compaiono qui appena una cartella li raggiunge.” / “Prizes
-  appear here as soon as a card reaches one.” / “Les prix apparaissent ici dès
-  qu'une carte en atteint un.”
+- Empty: “Le estrazioni con premi compaiono qui.” / “Draws with prizes appear
+  here.” / “Les tirages avec des prix apparaissent ici.” This copy is true both
+  before the first prize and after the first prize, when the only entry is
+  already shown in the latest panel and therefore excluded here.
 - Footer: the save status “Salvato su questo dispositivo.” / “Not saved on this
   device.”, same as the main app.
 - Reset opens the existing confirm pattern. After confirm, drawn numbers,
@@ -434,6 +435,10 @@ One polite live-region message per draw:
 The visual prize panel is **not** an `aria-live` region; the separate sr-only
 live region carries the announcement and avoids double-speaking.
 
+Prize detection is a pure classic script (`assets/prizes.js`) so the row
+thresholds, Bingo, disabled cards, and silent re-enable sync can be tested
+without a browser. Its API is defined in the implementation plan.
+
 ### Reset
 
 - Draw order, latest prizes, previous prizes, and `seen` are cleared.
@@ -474,8 +479,8 @@ live region carries the announcement and avoids double-speaking.
 - “Nuove cartelle” opens a confirm: “Generare nuove cartelle?” / “La partita
   in corso e le cartelle attuali vengono eliminate. Le cartelle già stampate
   non saranno più valide.” Confirm action: “Genera nuove cartelle” in danger
-  red. On confirm, clear `bingo.cards.v1`, return to setup, focus the count
-  field.
+  red. On confirm, clear `bingo.cards.v1`, return to setup with the defaults
+  (12 cards, Classico), focus the count field.
 - “Scarica di nuovo il PDF” rebuilds the current cards with the stored print
   theme. It does not change state. If it fails, show an inline error inside
   the drawer.
@@ -516,7 +521,7 @@ the setup preview.
 | Classico | `#0d766e` | `#f5fbf8` | `#1a2122` | `#c7d2cf` | `#ffffff` | `#0d766e` |
 | Natale | `#0c1711` | `#e8c375` | `#1f3128` | `#cfc7b4` | `#ffffff` | `#a8823c` |
 | Crema | `#f1e8d8` | `#8f1d17` | `#1f3128` | `#d8cbb8` | `#fffaf0` | `#b3261e` |
-| Bianco e nero | `#1a2122` | `#ffffff` | `#000000` | `#b3b3b3` | `#ffffff` | `#1a2122` |
+| Bianco e nero | `#1a1a1a` | `#ffffff` | `#000000` | `#b3b3b3` | `#ffffff` | `#1a1a1a` |
 
 - Classico uses the standard table teal.
 - Natale uses pine and tree gold.
@@ -603,9 +608,12 @@ generator small. The PDF is a document, not a screenshot of the app.
 ### Loading and validation
 
 - Parse defensively; never throw.
-- If `cards` is missing, empty, or contains an invalid grid, show setup. Do
-  not salvage a partial deck: card numbers must stay contiguous and the
-  printed set must match.
+- A deck is valid only when it has 1–100 cards, every grid passes the card
+  validator, and every grid signature is unique. If `cards` is missing, empty,
+  over the limit, duplicated, or contains an invalid grid, show setup. Do not
+  salvage a partial deck: card numbers must stay contiguous and the printed
+  set must match. Leave the stored value untouched until the user generates a
+  new deck, so a corrupt save is not silently rewritten on load.
 - Sanitize `drawn` like the main app: integers 1–90, unique, in order.
 - Drop disabled entries outside 1..cards.length; dedupe.
 - Sanitize log entries: known card numbers, known tier keys, awards for active
@@ -819,9 +827,9 @@ The only visible change is the topbar:
   switch.
 - The settings drawer is duplicated markup with the same language, names, and
   color controls, so preferences behave identically on both pages.
-- The page loads `assets/names.js`, `assets/cards.js`, `assets/pdf.js`, and
-  `assets/cartelle.js` as deferred classic scripts, plus `styles.css` and
-  `cartelle.css`.
+- The page loads `assets/names.js`, `assets/cards.js`, `assets/prizes.js`,
+  `assets/pdf.js`, and `assets/cartelle.js` as deferred classic scripts, plus
+  `styles.css` and `cartelle.css`.
 - A no-JS notice appears if JavaScript is unavailable.
 
 ## 21. Files and code organization
@@ -829,10 +837,14 @@ The only visible change is the topbar:
 ```
 cartelle.html              new page: setup, game, card drawer, settings, dialogs
 assets/cartelle.css        new mode-specific styles; reuses styles.css tokens
-assets/cartelle.js         state, i18n, draw, prizes, rendering, dialogs
+assets/cartelle.js         state, i18n, draw, rendering, dialogs
 assets/cards.js            pure card generation + validation (classic global)
+assets/prizes.js           pure prize detection + silent sync (classic global)
 assets/pdf.js              pure A4 PDF builder + theme palette (classic global)
 assets/names.js            shared Neapolitan names (classic global)
+tests/cards.test.mjs       Node built-in tests for card generation/validation
+tests/prizes.test.mjs      Node built-in tests for prize rules/sync
+tests/pdf.test.mjs         Node built-in tests for PDF structure/themes
 assets/styles.css          topbar actions/mode-link rules; settings label class
 assets/app.js              nav copy keys, names global, settings aria-label
 index.html                 topbar link; names.js script
@@ -842,8 +854,8 @@ README.md                  structure, features, storage key
 site.webmanifest           description now mentions cards (start_url unchanged)
 ```
 
-- `cards.js` and `pdf.js` are DOM-free and can be called from the page and the
-  test harness. They must not import anything.
+- `cards.js`, `prizes.js`, and `pdf.js` are DOM-free and can be called from
+  the page and the test harness. They must not import anything.
 - `cartelle.js` listens for `change` on preferences, applies theme/language,
   renders the setup or game, and persists.
 - The mode-specific CSS must not redefine the existing tokens or affect the
@@ -858,6 +870,15 @@ site.webmanifest           description now mentions cards (start_url unchanged)
 - Verify the main board, settings, reset, names, theme, and persistence are
   unchanged.
 - No console errors.
+
+### Pure-module tests
+
+Node's built-in test runner (no package, no dependency) covers the DOM-free
+modules:
+
+- `node --test tests/cards.test.mjs`
+- `node --test tests/prizes.test.mjs`
+- `node --test tests/pdf.test.mjs`
 
 ### New browser smoke test
 
@@ -965,7 +986,10 @@ relying on random draws.
 - All cards active by default; the referee disables the ones not distributed.
 - Per-row thresholds 2/3/4/5 plus full-card Bingo; only new thresholds
   announced.
-- Re-enabling syncs silently; reset keeps the deck; new cards clears it.
+- Re-enabling syncs silently; reset keeps the deck; new cards clears it and
+  returns to the defaults (12 cards, Classico).
+- A saved deck is accepted only if it has 1–100 valid, unique cards; an invalid
+  deck shows setup without overwriting the stored value.
 - A latest-draw prize panel plus a scrollable previous-prizes log.
 - Direct PDF download with a small custom PDF writer; no browser print dialog.
 - The card drawer owns re-download and “Nuove cartelle”.
