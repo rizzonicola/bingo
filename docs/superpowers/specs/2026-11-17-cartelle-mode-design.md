@@ -346,8 +346,11 @@ One full-width surface panel under the page head. Inside:
   - award lines: “Terna 3 · Quaterna 7 · Bingo 7”.
 - The latest draw's entry is excluded here when its prizes are already shown
   in the latest panel, so a prize is never listed twice.
-- The list scrolls; all of the game's prize draws are kept. On phones the list
-  has a max-height of about 340px. The reset button stays in the header.
+- The list scrolls on short viewports; all of the game's prize draws are kept.
+  Scroll chaining stays enabled, so a gesture that starts on the list reaches
+  the page once the list is at its edge. On phones the list is not an inner
+  scroll box: it grows with its content, and a touch anywhere on the prize
+  panel scrolls the page. The reset button stays in the header.
 - Empty: “Le estrazioni con premi compaiono qui.” / “Draws with prizes appear
   here.” / “Les tirages avec des prix apparaissent ici.” This copy is true both
   before the first prize and after the first prize, when the only entry is
