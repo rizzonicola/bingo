@@ -421,7 +421,13 @@
 
 @media (max-width: 380px) {
   .theme-choice .choice__label { font-size: 12px; }
-  .cards-trigger { gap: 6px; font-size: 13px; }
+  .page-head__tools .cards-trigger {
+    width: auto;
+    padding: 0 12px;
+    gap: 6px;
+    font-size: 13px;
+  }
+  .page-head__tools .cards-trigger span { display: inline; }
   .prize-cards { font-size: 30px; }
   .range-row { grid-template-columns: minmax(0, 1fr) 1fr 1fr; gap: 6px; }
 }
