@@ -1,9 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import '../assets/cards.js';
 import '../assets/prizes.js';
 
-const Cards = globalThis.BingoCards;
 const Prizes = globalThis.BingoPrizes;
 
 const CARD = [
@@ -17,16 +15,6 @@ const CARD_B = [
   [null, 13, 21, null, null, 53, 64, 72, null],
   [5, null, 25, null, 48, 59, null, 76, null],
 ];
-
-function seeded(seed) {
-  return max => {
-    seed |= 0;
-    seed = (seed + 0x6D2B79F5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) % max;
-  };
-}
 
 function draw(seen, numbers, extra = {}) {
   return Prizes.detect({
@@ -106,18 +94,9 @@ test('a jump to a later threshold only announces that threshold', () => {
 });
 
 test('multiple cards at the same tier are sorted by card number', () => {
-  let cards;
-  for (let attempt = 0; attempt < 50; attempt += 1) {
-    cards = Cards.generate(2, seeded(10 + attempt));
-    const left = new Set(cards[0][0].filter(value => value !== null));
-    const right = cards[1][0].filter(value => value !== null);
-    if (right.every(value => !left.has(value))) break;
-  }
-  const picked = cards.map(card => card[0].filter(value => value !== null).slice(0, 2));
-  const drawn = new Set(picked.flat());
   const result = Prizes.detect({
-    cards,
-    drawnSet: drawn,
+    cards: [CARD, CARD_B],
+    drawnSet: new Set([3, 12, 1, 11]),
     disabled: [],
     seen: Prizes.emptySeen(2),
   });
@@ -147,19 +126,6 @@ test('a tier closes after its first award', () => {
 
   result = Prizes.detect({ cards, drawnSet: new Set([3, 12, 1, 11, 31]), disabled: [], seen: result.seen, claimed: ['ambo'] });
   assert.deepEqual(result.awards, [{ card: 2, tier: 'terna' }]);
-});
-
-test('every card reaching an open tier on the same draw is awarded', () => {
-  const result = Prizes.detect({
-    cards: [CARD, CARD_B],
-    drawnSet: new Set([3, 12, 1, 11]),
-    disabled: [],
-    seen: Prizes.emptySeen(2),
-  });
-  assert.deepEqual(result.awards, [
-    { card: 1, tier: 'ambo' },
-    { card: 2, tier: 'ambo' },
-  ]);
 });
 
 test('a closed Bingo is tracked but not awarded again', () => {

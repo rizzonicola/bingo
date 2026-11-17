@@ -14,9 +14,10 @@ function seeded(seed) {
   };
 }
 
-function rowsOf(grid) {
-  return grid;
-}
+const COLUMN_RANGES = [
+  [1, 9], [10, 19], [20, 29], [30, 39], [40, 49],
+  [50, 59], [60, 69], [70, 79], [80, 90],
+];
 
 test('generates 100 valid, unique cards', () => {
   const cards = Cards.generate(100);
@@ -28,14 +29,13 @@ test('generates 100 valid, unique cards', () => {
     assert.equal(signatures.has(signature), false);
     signatures.add(signature);
 
-    for (const row of rowsOf(card)) {
+    for (const row of card) {
       assert.equal(row.filter(value => value !== null).length, 5);
     }
     for (let column = 0; column < 9; column += 1) {
       const values = card.map(row => row[column]).filter(value => value !== null);
       assert.ok(values.length >= 1 && values.length <= 3);
-      const start = column === 0 ? 1 : column * 10;
-      const end = column === 8 ? 90 : start + 9;
+      const [start, end] = COLUMN_RANGES[column];
       for (const value of values) assert.ok(value >= start && value <= end);
       assert.deepEqual(values, [...values].sort((a, b) => a - b));
     }
@@ -43,6 +43,21 @@ test('generates 100 valid, unique cards', () => {
     assert.equal(numbers.length, 15);
     assert.equal(new Set(numbers).size, 15);
   }
+});
+
+test('validation rejects 10 in the first column and descending columns', () => {
+  const card = Cards.generate(12, seeded(11)).find(candidate => !candidate.flat().includes(10));
+  assert.ok(card, 'a card without 10');
+
+  const wrongRange = card.map(row => row.slice());
+  wrongRange[0][0] = 10;
+  assert.equal(Cards.validateCard(wrongRange), false);
+
+  const descending = card.map(row => row.slice());
+  const column = descending[0].findIndex((value, index) =>
+    value !== null && descending[1][index] !== null);
+  [descending[0][column], descending[1][column]] = [descending[1][column], descending[0][column]];
+  assert.equal(Cards.validateCard(descending), false);
 });
 
 test('is deterministic with a seeded random source', () => {

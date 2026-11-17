@@ -8,9 +8,14 @@
   const NUMBERS_PER_ROW = 5;
   const MAX_ATTEMPTS = 300;
 
-  function columnPool(column) {
+  function columnRange(column) {
     const start = column === 0 ? 1 : column * 10;
-    const end = column === COLS - 1 ? 90 : start + 9;
+    const end = column === 0 ? 9 : column === COLS - 1 ? 90 : start + 9;
+    return [start, end];
+  }
+
+  function columnPool(column) {
+    const [start, end] = columnRange(column);
     const pool = [];
     for (let n = start; n <= end; n += 1) pool.push(n);
     return pool;
@@ -103,16 +108,17 @@
       const values = grid[row];
       if (!Array.isArray(values) || values.length !== COLS) return false;
       let rowCount = 0;
+      let previous = 0;
       for (let column = 0; column < COLS; column += 1) {
         const value = values[column];
         if (value === null) continue;
         if (!Number.isInteger(value) || value < 1 || value > 90) return false;
         if (seen.has(value)) return false;
         seen.add(value);
-        const start = column === 0 ? 1 : column * 10;
-        const end = column === COLS - 1 ? 90 : start + 9;
+        const [start, end] = columnRange(column);
         if (value < start || value > end) return false;
-        if (rowCount > 0 && value <= values[column - 1]) return false;
+        if (value <= previous) return false;
+        previous = value;
         rowCount += 1;
         total += 1;
       }
@@ -122,8 +128,13 @@
     if (total !== 15) return false;
     for (let column = 0; column < COLS; column += 1) {
       let count = 0;
+      let previous = 0;
       for (let row = 0; row < ROWS; row += 1) {
-        if (grid[row][column] !== null) count += 1;
+        const value = grid[row][column];
+        if (value === null) continue;
+        if (value <= previous) return false;
+        previous = value;
+        count += 1;
       }
       if (count < 1 || count > 3) return false;
     }
@@ -167,8 +178,6 @@
   }
 
   const api = {
-    MIN_CARDS,
-    MAX_CARDS,
     generate,
     validateCard,
     gridSignature,

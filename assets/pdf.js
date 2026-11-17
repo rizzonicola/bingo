@@ -213,8 +213,6 @@
   }
 
   const api = {
-    PAGE_W,
-    PAGE_H,
     THEMES,
     THEME_IDS,
     buildPdf,

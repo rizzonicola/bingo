@@ -1,0 +1,157 @@
+(function (root) {
+  'use strict';
+
+  // Keys shared by both pages; each page spreads this and adds its own copy.
+  root.BINGO_COPY = {
+    it: {
+      settings: 'Impostazioni',
+      drawnLabel: 'estratti',
+      progressLabel: 'Numeri estratti',
+      lastDraw: 'Ultima estrazione',
+      noDraw: 'Nessun numero estratto.',
+      draw: 'Estrai un numero',
+      boardTitle: 'Numeri da 1 a 90',
+      boardLabel: 'Tabellone dei numeri da 1 a 90',
+      recent: 'Ultimi estratti',
+      recentEmpty: 'I numeri compaiono qui appena escono.',
+      restart: 'Ricomincia',
+      saved: 'Salvato su questo dispositivo.',
+      notSaved: 'La partita non viene salvata su questo dispositivo.',
+      numbers: 'Numeri da 1 a 90',
+      shortcut: 'per estrarre',
+      spaceKey: 'Spazio',
+      close: 'Chiudi',
+      settingsLede: 'La lingua, i nomi e il colore si cambiano quando vuoi. Le modifiche restano su questo dispositivo.',
+      settingsLedePlain: 'La lingua, i nomi e il colore si cambiano quando vuoi.',
+      language: 'Lingua',
+      system: 'Sistema',
+      color: 'Colore',
+      light: 'Chiaro',
+      dark: 'Scuro',
+      christmas: 'Natale',
+      christmasLight: 'Crema',
+      christmasRed: 'Rosso',
+      names: 'Nomi napoletani',
+      namesToggle: 'Mostra il nome tradizionale',
+      namesHint: 'Sotto il numero compare il nome tradizionale napoletano.',
+      done: 'Fatto',
+      resetTitle: 'Ricominciare da capo?',
+      cancel: 'Annulla',
+      numberWord: 'Numero',
+      drawnCell: 'estratto',
+      pendingCell: 'non estratto',
+      drawOrdinal: n => `${n}ª estrazione`,
+      remaining: n => n === 1 ? 'Resta 1 numero.' : `Restano ${n} numeri.`,
+      allDrawn: 'Tutti i 90 numeri sono usciti.',
+      lastNumberSr: (n, name) => name
+        ? `Ultimo numero estratto: ${n}, ${name}.`
+        : `Ultimo numero estratto: ${n}.`,
+      drawAnnounce: (n, rest, name) => {
+        const called = `Estratto il numero ${n}${name ? `: ${name}` : ''}.`;
+        return rest === 0
+          ? `${called} Tutti i 90 numeri sono usciti.`
+          : `${called} ${rest === 1 ? 'Resta 1 numero.' : `Restano ${rest} numeri.`}`;
+      },
+    },
+    en: {
+      settings: 'Settings',
+      drawnLabel: 'drawn',
+      progressLabel: 'Numbers drawn',
+      lastDraw: 'Latest draw',
+      noDraw: 'No numbers drawn yet.',
+      draw: 'Draw a number',
+      boardTitle: 'Numbers 1 to 90',
+      boardLabel: 'Board of numbers 1 to 90',
+      recent: 'Latest numbers',
+      recentEmpty: 'Numbers appear here as they are drawn.',
+      restart: 'Start over',
+      saved: 'Saved on this device.',
+      notSaved: 'This game is not being saved on this device.',
+      numbers: 'Numbers 1 to 90',
+      shortcut: 'to draw',
+      spaceKey: 'Space',
+      close: 'Close',
+      settingsLede: 'Change the language, the names, and the color whenever you like. Your choices stay on this device.',
+      settingsLedePlain: 'Change the language, the names, and the color whenever you like.',
+      language: 'Language',
+      system: 'System',
+      color: 'Color',
+      light: 'Light',
+      dark: 'Dark',
+      christmas: 'Christmas',
+      christmasLight: 'Cream',
+      christmasRed: 'Red',
+      names: 'Neapolitan names',
+      namesToggle: 'Show the traditional name',
+      namesHint: 'The traditional Neapolitan name appears under each number.',
+      done: 'Done',
+      resetTitle: 'Start over?',
+      cancel: 'Cancel',
+      numberWord: 'Number',
+      drawnCell: 'drawn',
+      pendingCell: 'not drawn',
+      drawOrdinal: n => `Draw ${n}`,
+      remaining: n => n === 1 ? '1 number left.' : `${n} numbers left.`,
+      allDrawn: 'All 90 numbers are out.',
+      lastNumberSr: (n, name) => name
+        ? `Last number drawn: ${n}, ${name}.`
+        : `Last number drawn: ${n}.`,
+      drawAnnounce: (n, rest, name) => {
+        const called = `Number ${n} drawn${name ? `: ${name}` : ''}.`;
+        return rest === 0
+          ? `${called} All 90 numbers are out.`
+          : `${called} ${rest === 1 ? '1 number left.' : `${rest} numbers left.`}`;
+      },
+    },
+    fr: {
+      settings: 'Réglages',
+      drawnLabel: 'tirés',
+      progressLabel: 'Numéros tirés',
+      lastDraw: 'Dernier tirage',
+      noDraw: 'Aucun numéro tiré.',
+      draw: 'Tirer un numéro',
+      boardTitle: 'Numéros de 1 à 90',
+      boardLabel: 'Tableau des numéros de 1 à 90',
+      recent: 'Derniers numéros',
+      recentEmpty: 'Les numéros apparaissent ici au fur et à mesure.',
+      restart: 'Recommencer',
+      saved: 'Enregistré sur cet appareil.',
+      notSaved: "La partie n'est pas enregistrée sur cet appareil.",
+      numbers: 'Numéros de 1 à 90',
+      shortcut: 'pour tirer',
+      spaceKey: 'Espace',
+      close: 'Fermer',
+      settingsLede: 'Changez la langue, les noms et la couleur quand vous voulez. Vos choix restent sur cet appareil.',
+      settingsLedePlain: 'Changez la langue, les noms et la couleur quand vous voulez.',
+      language: 'Langue',
+      system: 'Système',
+      color: 'Couleur',
+      light: 'Clair',
+      dark: 'Sombre',
+      christmas: 'Noël',
+      christmasLight: 'Crème',
+      christmasRed: 'Rouge',
+      names: 'Noms napolitains',
+      namesToggle: 'Afficher le nom traditionnel',
+      namesHint: 'Le nom traditionnel napolitain apparaît sous chaque numéro.',
+      done: 'Terminé',
+      resetTitle: 'Recommencer à zéro ?',
+      cancel: 'Annuler',
+      numberWord: 'Numéro',
+      drawnCell: 'tiré',
+      pendingCell: 'pas tiré',
+      drawOrdinal: n => `Tirage ${n}`,
+      remaining: n => n === 1 ? '1 numéro restant.' : `${n} numéros restants.`,
+      allDrawn: 'Les 90 numéros sont sortis.',
+      lastNumberSr: (n, name) => name
+        ? `Dernier numéro tiré : ${n}, ${name}.`
+        : `Dernier numéro tiré : ${n}.`,
+      drawAnnounce: (n, rest, name) => {
+        const called = `Numéro ${n} tiré${name ? ` : ${name}` : ''}.`;
+        return rest === 0
+          ? `${called} Les 90 numéros sont sortis.`
+          : `${called} ${rest === 1 ? '1 numéro restant.' : `${rest} numéros restants.`}`;
+      },
+    },
+  };
+})(globalThis);

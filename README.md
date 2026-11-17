@@ -46,8 +46,12 @@ index.html            tabellone
 cartelle.html         modalità cartelle: setup, PDF, partita e premi
 assets/styles.css     token dei temi e stili condivisi
 assets/cartelle.css   layout della modalità cartelle
-assets/app.js         stato, i18n, estrazione, dialoghi del tabellone
-assets/cartelle.js    setup, stato, estrazione, premi e drawer delle cartelle
+assets/copy.js        testi condivisi tra tabellone e cartelle
+assets/common.js      costanti, preferenze, lingua, tema, dialoghi e storage
+assets/board-ui.js    tabellone, ultimo numero, conteggi e cronologia
+assets/game-state.js  stato puro delle cartelle: caricamento, estrazione, premi, intervalli
+assets/app.js         solo logica del tabellone
+assets/cartelle.js    setup, PDF e drawer delle cartelle
 assets/names.js       nomi napoletani condivisi
 assets/cards.js       generazione, validazione e intervalli delle cartelle
 assets/prizes.js      soglie dei premi e sincronizzazione silenziosa
@@ -63,10 +67,10 @@ Lo stato del tabellone è in `tombola.state.v1`; quello delle cartelle in `bingo
 
 ## Test
 
-I moduli puri (`cards.js`, `prizes.js`, `pdf.js`) si provano senza browser:
+I moduli puri (`cards.js`, `prizes.js`, `pdf.js`, `game-state.js`) si provano senza browser:
 
 ```sh
-node --test tests/cards.test.mjs tests/prizes.test.mjs tests/pdf.test.mjs
+node --test tests/*.test.mjs
 ```
 
 Le prove nel browser usano una pagina servita da HTTP, non `file://`, per poter leggere e scrivere `localStorage`.
