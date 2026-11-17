@@ -61,6 +61,8 @@
       drawnLabel: 'estratti',
       progressLabel: 'Numeri estratti',
       lastDraw: 'Ultima estrazione',
+      recent: 'Ultimi estratti',
+      recentEmpty: 'I numeri compaiono qui appena escono.',
       noDraw: 'Nessun numero estratto.',
       draw: 'Estrai un numero',
       boardTitle: 'Numeri da 1 a 90',
@@ -169,6 +171,8 @@
       drawnLabel: 'drawn',
       progressLabel: 'Numbers drawn',
       lastDraw: 'Latest draw',
+      recent: 'Latest numbers',
+      recentEmpty: 'Numbers appear here as they are drawn.',
       noDraw: 'No numbers drawn yet.',
       draw: 'Draw a number',
       boardTitle: 'Numbers 1 to 90',
@@ -277,6 +281,8 @@
       drawnLabel: 'tirés',
       progressLabel: 'Numéros tirés',
       lastDraw: 'Dernier tirage',
+      recent: 'Derniers numéros',
+      recentEmpty: 'Les numéros apparaissent ici au fur et à mesure.',
       noDraw: 'Aucun numéro tiré.',
       draw: 'Tirer un numéro',
       boardTitle: 'Numéros de 1 à 90',
@@ -397,6 +403,8 @@
     stageOrdinal: document.getElementById('stage-ordinal'),
     resetButton: document.getElementById('reset-button'),
     latestMeta: document.getElementById('latest-meta'),
+    recentEmpty: document.getElementById('recent-empty'),
+    recentList: document.getElementById('recent-list'),
     noActiveNotice: document.getElementById('no-active-notice'),
     latestEmpty: document.getElementById('latest-empty'),
     latestGroups: document.getElementById('latest-groups'),
@@ -534,6 +542,7 @@
     if (!hasGame) return;
 
     updateBoard(animateDraw);
+    updateRecent(animateDraw);
     updateTally();
     updateStage(animateDraw);
     updateLatestPrizes(animatePrizes);
@@ -568,6 +577,25 @@
     void fresh.offsetWidth;
     fresh.classList.add('is-new');
     window.setTimeout(() => fresh.classList.remove('is-new'), 560);
+  }
+
+  function updateRecent(animate) {
+    const recent = game.drawn.slice(-12).reverse();
+    dom.recentEmpty.hidden = recent.length > 0;
+    dom.recentList.hidden = recent.length === 0;
+    dom.recentList.replaceChildren();
+
+    recent.forEach((number, index) => {
+      const chip = document.createElement('li');
+      const name = neapolitanName(number);
+      chip.className = `history__chip${index === 0 ? ' is-latest' : ''}${animate && index === 0 ? ' is-new' : ''}`;
+      chip.textContent = String(number).padStart(2, '0');
+      if (name) {
+        chip.title = name;
+        chip.setAttribute('aria-label', `${number}, ${name}`);
+      }
+      dom.recentList.appendChild(chip);
+    });
   }
 
   function updateTally() {

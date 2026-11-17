@@ -294,7 +294,10 @@ Angoli morbidi ma non arrotondati per gioco: 8px per le celle, 10px per i contro
 ## Cartelle Mode
 
 ### Hierarchy
-La modalità cartelle tiene lo stesso centro di gravità del tabellone: numero enorme, nome napoletano, stato e pulsante nella scena. Il resto è subordinato in quest'ordine: i premi di questa estrazione, il tabellone, i premi precedenti. Il conteggio attivo e il pulsante "Cartelle · N attive" stanno nella testata della pagina, non nella barra superiore.
+La modalità cartelle tiene lo stesso centro di gravità del tabellone: numero enorme, nome napoletano, stato e pulsante nella scena. Il resto è subordinato in quest'ordine: i premi di questa estrazione, il tabellone, gli ultimi estratti, i premi precedenti. Il conteggio attivo e il pulsante "Cartelle · N attive" stanno nella testata della pagina, non nella barra superiore.
+
+### Latest numbers
+Sotto il tabellone, un pannello "Ultimi estratti" ripete gli ultimi 12 numeri con gli stessi chip della modalità principale: il più recente in evidenza, gli altri in ordine inverso. Non ha il piè di pagina di salvataggio, già presente nei premi precedenti. Su telefono si colloca tra il tabellone e i premi precedenti.
 
 ### Prize panels
 - **Tier:** 17–20px, peso 700, colore nebbia; il gruppo Bingo usa il colore dell'accento.

@@ -277,7 +277,11 @@ One full-width surface panel under the page head. Inside:
 └────────────────────────────────────┘ └──────────────────────────┘
 ```
 
-- The board keeps the existing `.board-panel` and 10 × 9 layout, full height.
+- The board keeps the existing `.board-panel` and 10 × 9 layout, above the
+  latest-numbers panel.
+- Under the board, a latest-numbers panel shows the last 12 drawn numbers,
+  newest first, with the same chips as the main board. It has no saved footer:
+  the previous-prizes panel already carries the save status.
 - The right rail is 320–380px wide and has three stacked panels: stage, latest
   prizes, previous prizes. The log panel is the flexible row and scrolls
   internally; the page itself should not scroll unless the latest prizes are
@@ -285,14 +289,27 @@ One full-width surface panel under the page head. Inside:
 - The stage reuses the main stage markup and styles: latest number huge,
   Neapolitan name if enabled, status, draw button.
 
+### Latest numbers panel
+
+- Header: “Ultimi estratti” / “Latest numbers” / “Derniers numéros”.
+- One chip per recent number, newest first, identical to the main board's
+  chips; the newest chip is highlighted. Chips wrap as needed.
+- Empty: “I numeri compaiono qui appena escono.” / “Numbers appear here as they
+  are drawn.” / “Les numéros apparaissent ici au fur et à mesure.”
+- The newest chip enters with the main board's chip animation;
+  `prefers-reduced-motion` removes it.
+- It reads the existing `drawn` array, so draw, reload, and reset need no new
+  state.
+
 ### Tablet and phone
 
-- **≤1000px:** one column, in this order: stage, latest prizes, board, previous
-  prizes. The stage uses the main's two-column tablet layout (number left,
-  actions right) from 641–1000px.
+- **≤1000px:** one column, in this order: stage, latest prizes, board, latest
+  numbers, previous prizes. The stage uses the main's two-column tablet layout
+  (number left, actions right) from 641–1000px.
 - **≤640px:** stage stacks vertically; latest prizes come immediately after
-  it, before the board; then the board; then the previous prizes. The reason
-  is that a prize call must not fall below the board on a phone.
+  it, before the board; then the board; then the latest numbers; then the
+  previous prizes. The reason is that a prize call must not fall below the
+  board on a phone.
 - The board keeps its 10:9 ratio and 3px gaps on phones.
 - The topbar is handled in §20.
 

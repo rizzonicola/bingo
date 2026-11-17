@@ -154,7 +154,10 @@
   display: grid;
   flex: 1;
   grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
-  grid-template-areas: "board rail";
+  grid-template-areas:
+    "board rail"
+    "history rail";
+  grid-template-rows: minmax(0, 1fr) auto;
   gap: 16px;
   min-height: 500px;
 }
@@ -373,7 +376,9 @@
       "stage"
       "latest"
       "board"
+      "history"
       "previous";
+    grid-template-rows: auto;
     flex: none;
     min-height: 0;
     gap: 12px;
