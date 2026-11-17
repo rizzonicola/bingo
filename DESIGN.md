@@ -285,7 +285,7 @@ Angoli morbidi ma non arrotondati per gioco: 8px per le celle, 10px per i contro
 - **Progress:** barra da 3px, fondo hairline, riempimento verde acqua; nessun numero sopra.
 
 ### Dialogs
-- **Drawer:** foglio laterale da 420px su desktop, foglio dal basso su mobile, fondo superficie, bordo hairline, backdrop scuro. Titolo 24px, sezioni con legend 13px, pulsante "Fatto" a tutta larghezza in fondo. Su mobile il piè di pagina resta agganciato al fondo mentre il contenuto scorre.
+- **Drawer:** foglio laterale da 420px su desktop, foglio dal basso su mobile, fondo superficie, bordo hairline, backdrop scuro. Titolo 24px, sezioni con legend 13px, pulsante "Fatto" a tutta larghezza in fondo. Su mobile il foglio entra dal basso, titolo e chiusura restano agganciati in alto e il piè di pagina in basso mentre il contenuto scorre.
 - **Confirm:** dialogo centrato da 420px, titolo 22px, corpo 14.5px, azioni a destra (in colonna inversa su mobile). Il focus iniziale cade su "Annulla".
 
 ## Do's and Don'ts
