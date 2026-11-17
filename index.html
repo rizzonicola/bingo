@@ -25,12 +25,19 @@
     root.classList.replace('no-js', 'js');
     let prefs = {};
     try { prefs = JSON.parse(localStorage.getItem('tombola.prefs.v1') || '{}') || {}; } catch (error) {}
-    const theme = ['light', 'dark', 'christmas'].includes(prefs.theme)
+    const colors = {
+      light: '#e8ece7',
+      dark: '#121617',
+      christmas: '#0c1711',
+      'christmas-light': '#f1e8d8',
+      'christmas-red': '#1b0c0d',
+    };
+    const theme = Object.hasOwn(colors, prefs.theme)
       ? prefs.theme
       : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     root.dataset.theme = theme;
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = theme === 'dark' ? '#121617' : theme === 'christmas' ? '#0c1711' : '#e8ece7';
+    if (meta) meta.content = colors[theme];
   })();
 </script>
 <script src="assets/app.js" defer></script>
@@ -51,7 +58,7 @@
           </g>
         </svg>
         <svg class="brand__hat" viewBox="0 0 48 40" focusable="false">
-          <path d="M7 31C5 19 13 7 25 5c7-1.2 12 1 15 5 2 2.8 1.5 6-1 7.5-2.5 1.5-5.5.5-7-2-2.2-3.7-6.2-5-10.5-4-6.5 1.5-10 8.5-9 18.5Z" fill="#c7352c"/>
+          <path d="M7 31C5 19 13 7 25 5c7-1.2 12 1 15 5 2 2.8 1.5 6-1 7.5-2.5 1.5-5.5.5-7-2-2.2-3.7-6.2-5-10.5-4-6.5 1.5-10 8.5-9 18.5Z" fill="#c7352c" stroke="#f8f3e7" stroke-width="2.5" stroke-linejoin="round"/>
           <rect x="4" y="29" width="36" height="9" rx="4.5" fill="#f8f3e7"/>
           <circle cx="43" cy="9" r="5" fill="#f8f3e7"/>
         </svg>
@@ -253,6 +260,22 @@
           <span class="choice__body choice__body--stacked">
             <span class="swatch swatch--xmas" aria-hidden="true"></span>
             <span class="choice__label" data-i18n="christmas">Natale</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="choice">
+          <input class="sr-only" type="radio" name="theme" value="christmas-light">
+          <span class="choice__body choice__body--stacked">
+            <span class="swatch swatch--xmas-light" aria-hidden="true"></span>
+            <span class="choice__label" data-i18n="christmasLight">Crema</span>
+            <span class="choice__mark" aria-hidden="true"></span>
+          </span>
+        </label>
+        <label class="choice">
+          <input class="sr-only" type="radio" name="theme" value="christmas-red">
+          <span class="choice__body choice__body--stacked">
+            <span class="swatch swatch--xmas-red" aria-hidden="true"></span>
+            <span class="choice__label" data-i18n="christmasRed">Rosso</span>
             <span class="choice__mark" aria-hidden="true"></span>
           </span>
         </label>

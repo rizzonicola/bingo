@@ -5,8 +5,14 @@
   const STATE_KEY = 'tombola.state.v1';
   const PREFS_KEY = 'tombola.prefs.v1';
   const LANGUAGES = ['it', 'en', 'fr'];
-  const THEMES = ['system', 'light', 'dark', 'christmas'];
-  const THEME_COLORS = { light: '#e8ece7', dark: '#121617', christmas: '#0c1711' };
+  const THEMES = ['system', 'light', 'dark', 'christmas', 'christmas-light', 'christmas-red'];
+  const THEME_COLORS = {
+    light: '#e8ece7',
+    dark: '#121617',
+    christmas: '#0c1711',
+    'christmas-light': '#f1e8d8',
+    'christmas-red': '#1b0c0d',
+  };
   const LANGUAGE_NAMES = { it: 'Italiano', en: 'English', fr: 'Français' };
 
   const NEAPOLITAN_NAMES = [
@@ -136,6 +142,8 @@
       light: 'Chiaro',
       dark: 'Scuro',
       christmas: 'Natale',
+      christmasLight: 'Crema',
+      christmasRed: 'Rosso',
       names: 'Nomi napoletani',
       namesToggle: 'Mostra il nome tradizionale',
       namesHint: 'Sotto il numero compare il nome tradizionale napoletano.',
@@ -193,6 +201,8 @@
       light: 'Light',
       dark: 'Dark',
       christmas: 'Christmas',
+      christmasLight: 'Cream',
+      christmasRed: 'Red',
       names: 'Neapolitan names',
       namesToggle: 'Show the traditional name',
       namesHint: 'The traditional Neapolitan name appears under each number.',
@@ -250,6 +260,8 @@
       light: 'Clair',
       dark: 'Sombre',
       christmas: 'Noël',
+      christmasLight: 'Crème',
+      christmasRed: 'Rouge',
       names: 'Noms napolitains',
       namesToggle: 'Afficher le nom traditionnel',
       namesHint: 'Le nom traditionnel napolitain apparaît sous chaque numéro.',

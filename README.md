@@ -19,7 +19,7 @@ Poi visita `http://localhost:4173`.
 - Azzeramento protetto da una conferma.
 - Partita e preferenze salvate in `localStorage`: ricaricare la pagina non perde la serata.
 - Lingua: sistema, italiano, inglese, francese.
-- Colore: sistema, chiaro, scuro, Natale. Il tema Natale aggiunge pino, oro e piccoli dettagli illustrati.
+- Colore: sistema, chiaro, scuro, Natale, Crema, Rosso. Le tre varianti natalizie aggiungono pino, oro, crema, rosso e piccoli dettagli illustrati, senza cambiare gerarchia né struttura.
 - Funziona senza build, senza framework e senza dipendenze esterne. Il font Gabarito è self-hosted con licenza OFL.
 
 Non ci sono cartelle da generare, verdetto finale, suoni o multiplayer: il perimetro è documentato in `PRODUCT.md`.
