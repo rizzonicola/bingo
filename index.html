@@ -41,6 +41,7 @@
     if (meta) meta.content = colors[theme];
   })();
 </script>
+<script src="assets/names.js" defer></script>
 <script src="assets/app.js" defer></script>
 </head>
 <body>
@@ -66,14 +67,25 @@
       </span>
       <span class="brand__word">bingo</span>
     </a>
-    <button class="settings-button" type="button" id="open-settings" aria-haspopup="dialog">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M4 7h6M15 7h5M4 17h3M12 17h8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-        <circle cx="12.5" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/>
-        <circle cx="9.5" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/>
-      </svg>
-      <span data-i18n="settings">Impostazioni</span>
-    </button>
+    <div class="topbar__actions">
+      <a class="mode-link" href="cartelle.html" data-i18n="cards" data-i18n-aria="cardsLink">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3.5" y="3.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          <rect x="13.5" y="3.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          <rect x="3.5" y="13.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          <rect x="13.5" y="13.5" width="7" height="7" rx="1.6" fill="currentColor"/>
+        </svg>
+        <span>Cartelle</span>
+      </a>
+      <button class="settings-button" type="button" id="open-settings" aria-haspopup="dialog" data-i18n-aria="settings">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h6M15 7h5M4 17h3M12 17h8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+          <circle cx="12.5" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          <circle cx="9.5" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        </svg>
+        <span data-i18n="settings">Impostazioni</span>
+      </button>
+    </div>
   </header>
 
   <main id="main">

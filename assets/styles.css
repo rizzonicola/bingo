@@ -304,7 +304,12 @@ kbd {
   letter-spacing: -.035em;
 }
 .brand:hover .brand__mark { transform: rotate(-5deg) scale(1.03); }
-.settings-button {
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.settings-button, .mode-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -317,11 +322,12 @@ kbd {
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
+  text-decoration: none;
   transition: background-color 180ms var(--ease), border-color 180ms var(--ease), transform 180ms var(--ease);
 }
-.settings-button:hover { background: var(--surface); border-color: var(--muted); }
-.settings-button:active { transform: translateY(1px); }
-.settings-button .icon { width: 18px; height: 18px; }
+.settings-button:hover, .mode-link:hover { background: var(--surface); border-color: var(--muted); }
+.settings-button:active, .mode-link:active { transform: translateY(1px); }
+.settings-button .icon, .mode-link .icon { width: 18px; height: 18px; }
 
 /* Page head */
 .page-head {
@@ -1068,16 +1074,22 @@ dialog::backdrop {
     gap: 12px;
     padding-bottom: calc(12px + env(safe-area-inset-bottom));
   }
-  .app > main { gap: 12px; }
-  .topbar { padding: 10px 0; }
-  .brand__mark { width: 32px; height: 32px; }
-  .brand__word { font-size: 19px; }
-  .settings-button { padding: 0 12px; }
   .page-head { row-gap: 10px; padding-top: 14px; }
   .page-head__copy { grid-column: 1 / -1; }
   .tally { grid-column: 1 / -1; padding-bottom: 0; }
   .page-head__intro { font-size: 14px; }
   .tally strong { font-size: 26px; }
+  .app > main { gap: 12px; }
+  .topbar { padding: 10px 0; }
+  .brand__mark { width: 32px; height: 32px; }
+  .brand__word { font-size: 19px; }
+  .settings-button, .mode-link { padding: 0 12px; }
+  .mode-link {
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  .mode-link span { display: none; }
   .game { gap: 12px; }
   .stage {
     display: flex;
@@ -1154,6 +1166,12 @@ dialog::backdrop {
 
 @media (max-width: 380px) {
   .page-head__copy h1 { font-size: 24px; }
+  .settings-button {
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  .settings-button span { display: none; }
   .stage__number { font-size: 96px; }
   .stage__number.is-empty { font-size: 72px; }
   .choice__body { gap: 8px; }
