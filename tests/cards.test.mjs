@@ -66,10 +66,41 @@ test('is deterministic with a seeded random source', () => {
   assert.deepEqual(first, second);
 });
 
-test('rejects counts outside 1..100', () => {
-  for (const count of [0, 101, -1, 1.5, NaN]) {
+test('caps decks at 5000 cards', () => {
+  assert.equal(Cards.MAX_CARDS, 5000);
+  for (const count of [0, 5001, -1, 1.5, NaN]) {
     assert.throws(() => Cards.generate(count), RangeError);
   }
+});
+
+test('generateAsync matches the synchronous deck for the same seed', async () => {
+  const sync = Cards.generate(12, seeded(42));
+  const asyncCards = await Cards.generateAsync(12, { batchSize: 5, random: seeded(42) });
+  assert.deepEqual(asyncCards, sync);
+
+  const signatures = new Set(asyncCards.map(Cards.gridSignature));
+  assert.equal(signatures.size, asyncCards.length);
+});
+
+test('generateAsync reports progress and yields between batches', async () => {
+  let ticked = false;
+  setTimeout(() => { ticked = true; }, 0);
+  const progress = [];
+  const cards = await Cards.generateAsync(7, {
+    batchSize: 3,
+    random: seeded(5),
+    onProgress: (done, total) => progress.push([done, total]),
+  });
+
+  assert.equal(cards.length, 7);
+  assert.equal(cards.every(Cards.validateCard), true);
+  assert.equal(ticked, true);
+  assert.deepEqual(progress, [[3, 7], [6, 7], [7, 7]]);
+});
+
+test('generateAsync rejects counts outside the cap', async () => {
+  await assert.rejects(() => Cards.generateAsync(0), RangeError);
+  await assert.rejects(() => Cards.generateAsync(Cards.MAX_CARDS + 1), RangeError);
 });
 
 test('validates card structure and rejects malformed grids', () => {

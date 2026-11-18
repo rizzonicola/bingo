@@ -18,7 +18,7 @@
   }
 
   function loadGame(stored, defaultTheme) {
-    if (!stored || !Array.isArray(stored.cards) || stored.cards.length < 1 || stored.cards.length > 100) {
+    if (!stored || !Array.isArray(stored.cards) || stored.cards.length < Cards.MIN_CARDS || stored.cards.length > Cards.MAX_CARDS) {
       return null;
     }
 

@@ -32,6 +32,8 @@
   const STATE_KEY = 'bingo.cards.v1';
   const DEFAULT_COUNT = 12;
   const DEFAULT_THEME = 'classico';
+  const PAGE_SIZE = 200;
+  const NUMBER_LOCALES = { it: 'it-IT', en: 'en-GB', fr: 'fr-FR' };
 
   function joinList(values, word) {
     const list = values.map(String);
@@ -57,18 +59,25 @@
       count: 'Numero di cartelle',
       countMinus: 'Una cartella in meno',
       countPlus: 'Una cartella in più',
-      countHint: 'Da 1 a 100.',
+      countHint: max => `Da 1 a ${max}.`,
       cardTheme: 'Tema delle cartelle',
       pdfOnly: 'Solo per il PDF.',
+      generate: 'Genera le cartelle',
       download: 'Scarica il PDF',
-      setupNote: 'PDF A4 · 3 cartelle per pagina. Il PDF si scarica subito; poi si gioca da qui.',
+      preparing: 'Preparo le cartelle…',
+      generating: (done, total) => `Genero ${done} di ${total} cartelle…`,
+      generatingPdf: 'Preparo il PDF…',
+      readyTitle: n => `${n} cartelle pronte.`,
+      readyNote: 'Scarica il PDF e stampalo. Poi chiama i numeri da qui.',
+      changeCount: 'Cambia numero',
+      setupNote: 'PDF A4 · 3 cartelle per pagina. La generazione può richiedere qualche secondo.',
       generateError: 'Non è stato possibile generare il PDF. Riprova.',
       generatedAnnounce: n => `${n} cartelle generate. PDF scaricato.`,
       themeClassico: 'Classico',
       themeNatale: 'Natale',
       themeCrema: 'Crema',
       themeBiancoNero: 'Bianco e nero',
-      cardsTrigger: n => `Cartelle · ${n} ${n === 1 ? 'attiva' : 'attive'}`,
+      cardsTrigger: n => `Cartelle · ${formatNumber(n)} ${n === 1 ? 'attiva' : 'attive'}`,
       latestPrizes: 'Premi di questa estrazione',
       latestBefore: 'I premi compaiono dopo la prima estrazione.',
       latestNoPrize: 'Nessun premio a questa estrazione.',
@@ -79,7 +88,7 @@
       resetAnnounce: 'Partita azzerata. I 90 numeri sono di nuovo disponibili.',
       cardsTitle: 'Cartelle',
       cardsLede: 'Disattiva le cartelle che non hai distribuito: i premi vengono cercati solo tra quelle attive. Ogni premio va alle prime cartelle che lo raggiungono.',
-      cardsSummary: (active, off) => `${active} ${active === 1 ? 'attiva' : 'attive'} · ${off} ${off === 1 ? 'non distribuita' : 'non distribuite'}`,
+      cardsSummary: (active, off) => `${formatNumber(active)} ${active === 1 ? 'attiva' : 'attive'} · ${formatNumber(off)} ${off === 1 ? 'non distribuita' : 'non distribuite'}`,
       ranges: 'Intervalli',
       rangeHint: 'Per esempio 8-20, 27',
       disable: 'Disattiva',
@@ -88,6 +97,10 @@
       cardsGridLabel: 'Scegli le cartelle attive',
       cardsLegend: 'Piena: attiva. Tratteggiata: non distribuita.',
       cardChip: (n, active) => `Cartella ${n}, ${active ? 'attiva' : 'non distribuita'}`,
+      pages: 'Pagine delle cartelle',
+      pagePrev: 'Pagina precedente',
+      pageNext: 'Pagina successiva',
+      pageRange: (from, to, total) => `${from}–${to} di ${total}`,
       redownload: 'Scarica di nuovo il PDF',
       redownloadError: 'Non è stato possibile scaricare il PDF. Riprova.',
       newCards: 'Nuove cartelle',
@@ -120,18 +133,25 @@
       count: 'Number of cards',
       countMinus: 'One card less',
       countPlus: 'One more card',
-      countHint: 'From 1 to 100.',
+      countHint: max => `From 1 to ${max}.`,
       cardTheme: 'Card theme',
       pdfOnly: 'For the PDF only.',
+      generate: 'Generate cards',
       download: 'Download PDF',
-      setupNote: 'A4 PDF · 3 cards per page. The PDF downloads right away; then you play from here.',
+      preparing: 'Preparing the cards…',
+      generating: (done, total) => `Generating ${done} of ${total} cards…`,
+      generatingPdf: 'Preparing the PDF…',
+      readyTitle: n => `${n} cards ready.`,
+      readyNote: 'Download the PDF and print it. Then call the numbers from here.',
+      changeCount: 'Change number',
+      setupNote: 'A4 PDF · 3 cards per page. Generation can take a few seconds.',
       generateError: 'Could not generate the PDF. Try again.',
       generatedAnnounce: n => `${n} cards generated. PDF downloaded.`,
       themeClassico: 'Classic',
       themeNatale: 'Christmas',
       themeCrema: 'Cream',
       themeBiancoNero: 'Black and white',
-      cardsTrigger: n => `Cards · ${n} active`,
+      cardsTrigger: n => `Cards · ${formatNumber(n)} active`,
       latestPrizes: 'Prizes on this draw',
       latestBefore: 'Prizes appear after the first draw.',
       latestNoPrize: 'No prizes on this draw.',
@@ -142,7 +162,7 @@
       resetAnnounce: 'Game cleared. All 90 numbers are available again.',
       cardsTitle: 'Cards',
       cardsLede: 'Disable the cards you did not hand out: prizes are checked only on active cards. Each prize goes to the first cards that reach it.',
-      cardsSummary: (active, off) => `${active} active · ${off} not distributed`,
+      cardsSummary: (active, off) => `${formatNumber(active)} active · ${formatNumber(off)} not distributed`,
       ranges: 'Ranges',
       rangeHint: 'For example 8-20, 27',
       disable: 'Disable',
@@ -151,6 +171,10 @@
       cardsGridLabel: 'Choose the active cards',
       cardsLegend: 'Solid: active. Dashed: not distributed.',
       cardChip: (n, active) => `Card ${n}, ${active ? 'active' : 'not distributed'}`,
+      pages: 'Card pages',
+      pagePrev: 'Previous page',
+      pageNext: 'Next page',
+      pageRange: (from, to, total) => `${from}–${to} of ${total}`,
       redownload: 'Download the PDF again',
       redownloadError: 'Could not download the PDF. Try again.',
       newCards: 'New cards',
@@ -183,18 +207,25 @@
       count: 'Nombre de cartes',
       countMinus: 'Une carte de moins',
       countPlus: 'Une carte de plus',
-      countHint: 'De 1 à 100.',
+      countHint: max => `De 1 à ${max}.`,
       cardTheme: 'Thème des cartes',
       pdfOnly: 'Pour le PDF uniquement.',
+      generate: 'Générer les cartes',
       download: 'Télécharger le PDF',
-      setupNote: 'PDF A4 · 3 cartes par page. Le PDF se télécharge tout de suite ; ensuite, on joue ici.',
+      preparing: 'Préparation des cartes…',
+      generating: (done, total) => `Génération de ${done} cartes sur ${total}…`,
+      generatingPdf: 'Préparation du PDF…',
+      readyTitle: n => `${n} cartes prêtes.`,
+      readyNote: 'Téléchargez le PDF et imprimez-le. Ensuite, tirez les numéros ici.',
+      changeCount: 'Changer le nombre',
+      setupNote: 'PDF A4 · 3 cartes par page. La génération peut prendre quelques secondes.',
       generateError: 'Impossible de générer le PDF. Réessayez.',
       generatedAnnounce: n => `${n} cartes générées. PDF téléchargé.`,
       themeClassico: 'Classique',
       themeNatale: 'Noël',
       themeCrema: 'Crème',
       themeBiancoNero: 'Noir et blanc',
-      cardsTrigger: n => `Cartes · ${n} active${n === 1 ? '' : 's'}`,
+      cardsTrigger: n => `Cartes · ${formatNumber(n)} active${n === 1 ? '' : 's'}`,
       latestPrizes: 'Prix de ce tirage',
       latestBefore: 'Les prix apparaissent après le premier tirage.',
       latestNoPrize: 'Aucun prix pour ce tirage.',
@@ -205,7 +236,7 @@
       resetAnnounce: 'Partie remise à zéro. Les 90 numéros sont de nouveau disponibles.',
       cardsTitle: 'Cartes',
       cardsLede: "Désactivez les cartes que vous n'avez pas distribuées : les prix ne sont recherchés que parmi les cartes actives. Chaque prix revient aux premières cartes qui l'atteignent.",
-      cardsSummary: (active, off) => `${active} active${active === 1 ? '' : 's'} · ${off} non distribuée${off === 1 ? '' : 's'}`,
+      cardsSummary: (active, off) => `${formatNumber(active)} active${active === 1 ? '' : 's'} · ${formatNumber(off)} non distribuée${off === 1 ? '' : 's'}`,
       ranges: 'Plages',
       rangeHint: 'Par exemple 8-20, 27',
       disable: 'Désactiver',
@@ -214,6 +245,10 @@
       cardsGridLabel: 'Choisissez les cartes actives',
       cardsLegend: 'Pleine : active. En pointillés : non distribuée.',
       cardChip: (n, active) => `Carte ${n}, ${active ? 'active' : 'non distribuée'}`,
+      pages: 'Pages des cartes',
+      pagePrev: 'Page précédente',
+      pageNext: 'Page suivante',
+      pageRange: (from, to, total) => `${from}–${to} sur ${total}`,
       redownload: 'Télécharger à nouveau le PDF',
       redownloadError: 'Impossible de télécharger le PDF. Réessayez.',
       newCards: 'Nouvelles cartes',
@@ -239,6 +274,9 @@
   let resolvedLang = prefs.lang === 'system' ? systemLang : prefs.lang;
   let game = State.loadGame(readStored(STATE_KEY, null), DEFAULT_THEME);
   let selectedTheme = DEFAULT_THEME;
+  let pendingPdf = null;
+  let cardsPage = 0;
+  let busy = false;
 
   const dom = {
     pageTitle: document.getElementById('page-title'),
@@ -249,6 +287,14 @@
     drawnCount: document.getElementById('drawn-count'),
     setupView: document.getElementById('setup-view'),
     setupForm: document.getElementById('setup-form'),
+    setupFields: document.getElementById('setup-fields'),
+    setupSubmit: document.getElementById('setup-submit'),
+    setupProgress: document.getElementById('setup-progress'),
+    setupProgressText: document.getElementById('setup-progress-text'),
+    setupReady: document.getElementById('setup-ready'),
+    setupReadyTitle: document.getElementById('setup-ready-title'),
+    startButton: document.getElementById('start-button'),
+    changeCount: document.getElementById('change-count'),
     cardCount: document.getElementById('card-count'),
     countMinus: document.getElementById('count-minus'),
     countPlus: document.getElementById('count-plus'),
@@ -288,6 +334,10 @@
     disableRange: document.getElementById('disable-range'),
     enableRange: document.getElementById('enable-range'),
     cardsGrid: document.getElementById('cards-grid'),
+    cardsPager: document.getElementById('cards-pager'),
+    cardsPageStatus: document.getElementById('cards-page'),
+    cardsPrev: document.getElementById('cards-prev'),
+    cardsNext: document.getElementById('cards-next'),
     cardsError: document.getElementById('cards-error'),
     redownloadButton: document.getElementById('redownload-button'),
     newCardsButton: document.getElementById('new-cards-button'),
@@ -324,6 +374,9 @@
   function init() {
     ui.build();
     buildThemeChoices();
+    dom.cardCount.min = String(Cards.MIN_CARDS);
+    dom.cardCount.max = String(Cards.MAX_CARDS);
+    setSetupState('form');
     syncControls(prefs, dom);
     applyTheme();
     bindEvents();
@@ -338,6 +391,23 @@
 
   function neapolitanName(number) {
     return prefs.names ? (NAMES[number - 1] || '') : '';
+  }
+
+  function formatNumber(value) {
+    return new Intl.NumberFormat(NUMBER_LOCALES[resolvedLang] || 'en-GB', { useGrouping: true }).format(value);
+  }
+
+  function setSetupState(state) {
+    dom.setupFields.hidden = state !== 'form';
+    dom.setupSubmit.hidden = state !== 'form';
+    dom.setupProgress.hidden = state !== 'progress';
+    dom.setupReady.hidden = state !== 'ready';
+    dom.setupForm.setAttribute('aria-busy', String(state === 'progress'));
+  }
+
+  function renderReadyCopy() {
+    if (!game) return;
+    dom.setupReadyTitle.textContent = t('readyTitle', formatNumber(game.cards.length));
   }
 
   function buildThemeChoices() {
@@ -402,16 +472,19 @@
   }
 
   function render({ animateDraw = false, animatePrizes = false } = {}) {
-    const hasGame = Boolean(game);
-    dom.setupView.hidden = hasGame;
-    dom.gameView.hidden = !hasGame;
-    dom.pageTools.hidden = !hasGame;
-    dom.progress.hidden = !hasGame;
-    dom.pageTitle.textContent = t(hasGame ? 'gameTitle' : 'setupTitle');
-    dom.pageIntro.textContent = t(hasGame ? 'gameIntro' : 'setupIntro');
-    dom.shortcut.hidden = !hasGame;
+    const showSetup = !game || Boolean(pendingPdf);
+    dom.setupView.hidden = !showSetup;
+    dom.gameView.hidden = showSetup;
+    dom.pageTools.hidden = showSetup;
+    dom.progress.hidden = showSetup;
+    dom.pageTitle.textContent = t(showSetup ? 'setupTitle' : 'gameTitle');
+    dom.pageIntro.textContent = t(showSetup ? 'setupIntro' : 'gameIntro');
+    dom.shortcut.hidden = showSetup;
 
-    if (!hasGame) return;
+    if (showSetup) {
+      if (pendingPdf) renderReadyCopy();
+      return;
+    }
 
     ui.renderDrawn(game.drawn, animateDraw);
     ui.renderTally(game.drawn);
@@ -536,8 +609,9 @@
     announce(t('resetAnnounce'));
   }
 
-  function generateCards(event) {
+  async function generateCards(event) {
     event.preventDefault();
+    if (busy) return;
     const count = readCount();
     if (count === null) {
       validateCount();
@@ -545,27 +619,69 @@
     }
 
     clearSetupError();
-    dom.downloadButton.disabled = true;
+    busy = true;
+    dom.setupProgressText.textContent = t('preparing');
+    setSetupState('progress');
 
     try {
-      const cards = Cards.generate(count);
+      const cards = await Cards.generateAsync(count, {
+        onProgress: (done, total) => {
+          dom.setupProgressText.textContent = t('generating', formatNumber(done), formatNumber(total));
+        },
+      });
+
+      dom.setupProgressText.textContent = t('generatingPdf');
+      await new Promise(resolve => setTimeout(resolve, 0));
+
       const pdf = Pdf.buildPdf({ cards, theme: selectedTheme, lang: resolvedLang });
-      downloadPdf(pdf, Pdf.pdfFilename(count));
+      pendingPdf = {
+        blob: new Blob([pdf], { type: 'application/pdf' }),
+        filename: Pdf.pdfFilename(count),
+      };
       game = State.createGame(cards, selectedTheme);
       persistGame();
-      render();
-      announce(t('generatedAnnounce', count));
-      dom.drawButton.focus();
+      cardsPage = 0;
+      renderReadyCopy();
+      setSetupState('ready');
+      dom.startButton.focus();
     } catch (error) {
+      game = null;
+      pendingPdf = null;
+      setSetupState('form');
       showSetupError(t('generateError'));
     } finally {
-      dom.downloadButton.disabled = false;
+      busy = false;
       validateCount();
     }
   }
 
-  function downloadPdf(pdf, filename) {
-    const blob = new Blob([pdf], { type: 'application/pdf' });
+  function startGame() {
+    if (!pendingPdf || !game) return;
+    try {
+      downloadBlob(pendingPdf.blob, pendingPdf.filename);
+    } catch (error) {
+      showSetupError(t('redownloadError'));
+      return;
+    }
+
+    pendingPdf = null;
+    render();
+    announce(t('generatedAnnounce', formatNumber(game.cards.length)));
+    dom.drawButton.focus();
+  }
+
+  function changeCount() {
+    pendingPdf = null;
+    game = null;
+    clearStoredGame();
+    clearSetupError();
+    setSetupState('form');
+    render();
+    validateCount();
+    dom.cardCount.focus();
+  }
+
+  function downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -583,7 +699,7 @@
     dom.redownloadButton.disabled = true;
     try {
       const pdf = Pdf.buildPdf({ cards: game.cards, theme: game.printTheme, lang: resolvedLang });
-      downloadPdf(pdf, Pdf.pdfFilename(game.cards.length));
+      downloadBlob(new Blob([pdf], { type: 'application/pdf' }), Pdf.pdfFilename(game.cards.length));
     } catch (error) {
       dom.cardsError.textContent = t('redownloadError');
       dom.cardsError.hidden = false;
@@ -605,9 +721,14 @@
     const off = new Set(game.disabled);
     const active = game.cards.length - off.size;
     dom.cardsSummary.textContent = t('cardsSummary', active, off.size);
-    dom.cardsGrid.replaceChildren();
 
-    game.cards.forEach((card, index) => {
+    const pages = Math.max(1, Math.ceil(game.cards.length / PAGE_SIZE));
+    if (cardsPage >= pages) cardsPage = pages - 1;
+    const start = cardsPage * PAGE_SIZE;
+    const end = Math.min(start + PAGE_SIZE, game.cards.length);
+
+    const fragment = document.createDocumentFragment();
+    for (let index = start; index < end; index += 1) {
       const number = index + 1;
       const isActive = !off.has(number);
       const button = document.createElement('button');
@@ -617,8 +738,30 @@
       button.setAttribute('aria-pressed', String(isActive));
       button.setAttribute('aria-label', t('cardChip', number, isActive));
       button.textContent = String(number);
-      dom.cardsGrid.appendChild(button);
-    });
+      fragment.appendChild(button);
+    }
+    dom.cardsGrid.replaceChildren(fragment);
+
+    dom.cardsPager.hidden = pages <= 1;
+    dom.cardsPageStatus.textContent = t(
+      'pageRange',
+      formatNumber(start + 1),
+      formatNumber(end),
+      formatNumber(game.cards.length)
+    );
+    dom.cardsPrev.disabled = cardsPage === 0;
+    dom.cardsNext.disabled = cardsPage === pages - 1;
+  }
+
+  function changePage(delta) {
+    if (!game) return;
+    const pages = Math.max(1, Math.ceil(game.cards.length / PAGE_SIZE));
+    const next = Math.min(pages - 1, Math.max(0, cardsPage + delta));
+    if (next === cardsPage) return;
+    cardsPage = next;
+    renderCardsDrawer();
+    const first = dom.cardsGrid.querySelector('.card-chip');
+    if (first) first.focus();
   }
 
   function toggleCard(number) {
@@ -635,7 +778,7 @@
     if (!game) return;
     const { game: next, changed, numbers } = State.applyRange(game, mode, dom.rangeInput.value);
     if (!numbers.length) {
-      showRangeError(t('rangeError', game.cards.length));
+      showRangeError(t('rangeError', formatNumber(game.cards.length)));
       return;
     }
 
@@ -663,6 +806,8 @@
 
   function confirmNewCards() {
     game = null;
+    pendingPdf = null;
+    cardsPage = 0;
     selectedTheme = DEFAULT_THEME;
     clearStoredGame();
     if (dom.cardsDialog.open) closeDialog(dom.cardsDialog);
@@ -673,6 +818,7 @@
     clearSetupError();
     hideRangeError();
     dom.cardsError.hidden = true;
+    setSetupState('form');
     render();
     validateCount();
     dom.cardCount.focus();
@@ -690,20 +836,20 @@
     const raw = dom.cardCount.value.trim();
     if (raw === '') return null;
     const value = Number(raw);
-    return Number.isInteger(value) && value >= 1 && value <= 100 ? value : null;
+    return Number.isInteger(value) && value >= Cards.MIN_CARDS && value <= Cards.MAX_CARDS ? value : null;
   }
 
   function clampCount() {
     if (dom.cardCount.value.trim() === '') return;
     const value = Number(dom.cardCount.value);
     if (!Number.isFinite(value)) return;
-    dom.cardCount.value = String(Math.min(100, Math.max(1, Math.round(value))));
+    dom.cardCount.value = String(Math.min(Cards.MAX_CARDS, Math.max(Cards.MIN_CARDS, Math.round(value))));
     validateCount();
   }
 
   function stepCount(delta) {
     const current = readCount() ?? DEFAULT_COUNT;
-    dom.cardCount.value = String(Math.min(100, Math.max(1, current + delta)));
+    dom.cardCount.value = String(Math.min(Cards.MAX_CARDS, Math.max(Cards.MIN_CARDS, current + delta)));
     clearSetupError();
     validateCount();
   }
@@ -729,6 +875,7 @@
       copy: COPY,
       detectedLanguage: dom.detectedLanguage,
     });
+    dom.countHint.textContent = t('countHint', formatNumber(Cards.MAX_CARDS));
     render();
     applyPersistenceCopy();
   }
@@ -745,6 +892,8 @@
 
   function bindEvents() {
     dom.setupForm.addEventListener('submit', generateCards);
+    dom.startButton.addEventListener('click', startGame);
+    dom.changeCount.addEventListener('click', changeCount);
     dom.cardCount.addEventListener('input', () => {
       clearSetupError();
       validateCount();
@@ -820,6 +969,8 @@
       if (!button) return;
       toggleCard(Number(button.dataset.card));
     });
+    dom.cardsPrev.addEventListener('click', () => changePage(-1));
+    dom.cardsNext.addEventListener('click', () => changePage(1));
     dom.rangeInput.addEventListener('input', hideRangeError);
     dom.disableRange.addEventListener('click', () => applyRange('disable'));
     dom.enableRange.addEventListener('click', () => applyRange('enable'));
@@ -828,7 +979,7 @@
 
     bindShortcut({
       drawButton: dom.drawButton,
-      canDraw: () => Boolean(game),
+      canDraw: () => Boolean(game) && !pendingPdf,
       draw: drawNumber,
     });
 

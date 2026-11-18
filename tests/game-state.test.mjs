@@ -6,8 +6,19 @@ import '../assets/pdf.js';
 import '../assets/common.js';
 import '../assets/game-state.js';
 
+const Cards = globalThis.BingoCards;
 const Prizes = globalThis.BingoPrizes;
 const State = globalThis.BingoGameState;
+
+function seeded(seed) {
+  return max => {
+    seed |= 0;
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) % max;
+  };
+}
 
 const CARD = [
   [3, 12, null, 34, 41, null, null, null, 88],
@@ -54,6 +65,14 @@ test('loadGame rejects duplicate or malformed cards', () => {
   assert.equal(State.loadGame({ cards: [broken] }, 'classico'), null);
   assert.equal(State.loadGame({ cards: [] }, 'classico'), null);
   assert.equal(State.loadGame(null, 'classico'), null);
+});
+
+test('loadGame accepts decks above the old cap and rejects decks above MAX_CARDS', () => {
+  const deck = Cards.generate(101, seeded(3));
+  assert.ok(State.loadGame({ cards: deck, drawn: [] }, 'classico'));
+
+  const beyond = new Array(Cards.MAX_CARDS + 1).fill(deck[0]);
+  assert.equal(State.loadGame({ cards: beyond, drawn: [] }, 'classico'), null);
 });
 
 test('draw appends one log entry and claims each tier once', () => {

@@ -37,7 +37,7 @@ Nessuna registrazione, nessun contorno da sala da gioco: due schermate pulite, p
 - Ultimo numero in grande, conteggio degli estratti e dei numeri rimasti, cronologia recente.
 - Barra spaziatrice come scorciatoia per estrarre, con rispetto delle impostazioni di movimento del sistema.
 - Azzeramento della partita protetto da una conferma.
-- Modalità cartelle separata: da 1 a 100 cartelle numerate, tre per pagina A4, scaricate direttamente come PDF senza passare dal dialogo di stampa.
+- Modalità cartelle separata: da 1 a 5.000 cartelle numerate, tre per pagina A4, generate con avanzamento visibile e scaricate con un pulsante esplicito senza passare dal dialogo di stampa.
 - Quattro temi di stampa: Classico, Natale, Crema e Bianco e nero.
 - Ultimi 12 numeri estratti sotto il tabellone anche nella modalità cartelle, con gli stessi chip della modalità principale.
 - Premi cercati solo sulle cartelle attive: ambo, terna, quaterna, cinquina e bingo, annunciati con i numeri delle cartelle. Ogni livello si assegna una volta sola, alla prima estrazione che lo raggiunge. Le cartelle non distribuite si disattivano una per una o per intervalli come `8-20, 27`, e non generano premi.

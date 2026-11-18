@@ -23,11 +23,12 @@ Poi visita `http://localhost:4173`. La modalità cartelle è su `cartelle.html`;
 
 ### Cartelle
 
-- Da 1 a 100 cartelle numerate, tre per pagina A4, con un PDF scaricato direttamente (senza dialogo di stampa).
+- Da 1 a 5.000 cartelle numerate, tre per pagina A4, con un PDF scaricato direttamente (senza dialogo di stampa).
+- Generazione a blocchi con avanzamento visibile; quando il PDF è pronto compare il pulsante per scaricarlo e iniziare la partita.
 - Quattro temi di stampa: Classico, Natale, Crema e Bianco e nero.
 - Ultimi 12 numeri estratti sotto il tabellone, come nella modalità principale.
 - Ambo, terna, quaterna, cinquina e bingo cercati solo sulle cartelle attive e assegnati una volta sola, alla prima estrazione che li raggiunge; tutte le cartelle che lo raggiungono in quella estrazione vengono annunciate.
-- Cartelle non distribuite disattivabili una per una o per intervalli come `8-20, 27`; non generano premi.
+- Cartelle non distribuite disattivabili una per una o per intervalli come `8-20, 27`; non generano premi. Il gestore mostra 200 cartelle per pagina.
 - Riaprire una cartella non ripete i premi già passati; "Nuove cartelle" azzera la partita e torna ai valori iniziali.
 - Partita delle cartelle salvata separatamente dal tabellone.
 

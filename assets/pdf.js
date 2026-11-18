@@ -65,8 +65,8 @@
   function buildPdf({ cards, theme, lang }) {
     const Cards = root.BingoCards;
     if (!Cards) throw new Error('Card module is unavailable.');
-    if (!Array.isArray(cards) || cards.length < 1 || cards.length > 100) {
-      throw new Error('A deck must contain 1 to 100 cards.');
+    if (!Array.isArray(cards) || cards.length < Cards.MIN_CARDS || cards.length > Cards.MAX_CARDS) {
+      throw new Error(`A deck must contain ${Cards.MIN_CARDS} to ${Cards.MAX_CARDS} cards.`);
     }
 
     const signatures = new Set();

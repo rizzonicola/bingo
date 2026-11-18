@@ -89,7 +89,14 @@ test('rejects invalid cards and duplicate decks', () => {
   row[row.findIndex(value => value !== null)] = null;
   assert.throws(() => Pdf.buildPdf({ cards: [invalid[0]], theme: 'classico', lang: 'it' }), /Invalid card/);
   assert.throws(() => Pdf.buildPdf({ cards: [cards[0], cards[0]], theme: 'classico', lang: 'it' }), /Duplicate card/);
-  assert.throws(() => Pdf.buildPdf({ cards: [], theme: 'classico', lang: 'it' }), /1 to 100/);
+  assert.throws(() => Pdf.buildPdf({ cards: [], theme: 'classico', lang: 'it' }), /1 to 5000/);
+  assert.throws(() => Pdf.buildPdf({ cards: new Array(5001), theme: 'classico', lang: 'it' }), /1 to 5000/);
+});
+
+test('builds decks above the old 100-card cap', () => {
+  const deck = Cards.generate(101, seeded(3));
+  const pdf = Pdf.buildPdf({ cards: deck, theme: 'classico', lang: 'it' });
+  assert.match(pdf, /\/Count 34\b/);
 });
 
 test('names the file from the card count', () => {

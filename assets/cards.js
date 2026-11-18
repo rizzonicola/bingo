@@ -2,7 +2,7 @@
   'use strict';
 
   const MIN_CARDS = 1;
-  const MAX_CARDS = 100;
+  const MAX_CARDS = 5000;
   const ROWS = 3;
   const COLS = 9;
   const NUMBERS_PER_ROW = 5;
@@ -23,30 +23,54 @@
 
   const COLUMNS = Array.from({ length: COLS }, (_, column) => columnPool(column));
 
-  function generate(count, random = randomIndex) {
+  function assertCount(count) {
     if (!Number.isInteger(count) || count < MIN_CARDS || count > MAX_CARDS) {
       throw new RangeError(`Card count must be an integer from ${MIN_CARDS} to ${MAX_CARDS}.`);
     }
+  }
 
+  function createDeck(random) {
     const cards = [];
     const signatures = new Set();
 
-    for (let i = 0; i < count; i += 1) {
-      let card = null;
-      for (let attempt = 0; attempt < MAX_ATTEMPTS && !card; attempt += 1) {
-        const candidate = createCard(random);
-        if (!candidate) continue;
-        if (!validateCard(candidate)) continue;
-        const signature = gridSignature(candidate);
-        if (signatures.has(signature)) continue;
-        signatures.add(signature);
-        card = candidate;
-      }
-      if (!card) throw new Error('Unable to generate a unique card.');
-      cards.push(card);
+    return {
+      cards,
+      add() {
+        for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
+          const candidate = createCard(random);
+          if (!candidate) continue;
+          if (!validateCard(candidate)) continue;
+          const signature = gridSignature(candidate);
+          if (signatures.has(signature)) continue;
+          signatures.add(signature);
+          cards.push(candidate);
+          return;
+        }
+        throw new Error('Unable to generate a unique card.');
+      },
+    };
+  }
+
+  function generate(count, random = randomIndex) {
+    assertCount(count);
+    const deck = createDeck(random);
+    for (let i = 0; i < count; i += 1) deck.add();
+    return deck.cards;
+  }
+
+  async function generateAsync(count, { onProgress, batchSize = 250, random = randomIndex } = {}) {
+    assertCount(count);
+    const size = Number.isInteger(batchSize) && batchSize > 0 ? batchSize : 250;
+    const deck = createDeck(random);
+
+    for (let done = 1; done <= count; done += 1) {
+      deck.add();
+      if (done % size !== 0 && done !== count) continue;
+      if (onProgress) onProgress(done, count);
+      if (done < count) await new Promise(resolve => setTimeout(resolve, 0));
     }
 
-    return cards;
+    return deck.cards;
   }
 
   function createCard(random) {
@@ -178,7 +202,10 @@
   }
 
   const api = {
+    MIN_CARDS,
+    MAX_CARDS,
     generate,
+    generateAsync,
     validateCard,
     gridSignature,
     parseRanges,

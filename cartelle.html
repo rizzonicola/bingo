@@ -122,15 +122,15 @@
 
     <section class="setup" id="setup-view" aria-labelledby="page-title">
       <form class="setup-panel" id="setup-form" novalidate>
-        <div class="setup-fields">
+        <div class="setup-fields" id="setup-fields">
           <div class="field setup-count">
             <label class="field-label" for="card-count" data-i18n="count">Numero di cartelle</label>
             <div class="stepper">
               <button class="stepper__button" type="button" id="count-minus" data-i18n-aria="countMinus" aria-label="Una cartella in meno">−</button>
-              <input class="stepper__input" id="card-count" name="count" type="number" inputmode="numeric" min="1" max="100" step="1" value="12" aria-describedby="count-hint">
+              <input class="stepper__input" id="card-count" name="count" type="number" inputmode="numeric" min="1" max="5000" step="1" value="12" aria-describedby="count-hint">
               <button class="stepper__button" type="button" id="count-plus" data-i18n-aria="countPlus" aria-label="Una cartella in più">+</button>
             </div>
-            <p class="field-hint" id="count-hint" data-i18n="countHint" hidden>Da 1 a 100.</p>
+            <p class="field-hint" id="count-hint" hidden>Da 1 a 5.000.</p>
           </div>
 
           <fieldset class="field setup-theme">
@@ -140,14 +140,36 @@
           </fieldset>
         </div>
 
-        <button class="btn-draw setup-download" type="submit" id="download-button">
-          <svg class="btn-draw__icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M4.5 17.5v1.2a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-1.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-          <span data-i18n="download">Scarica il PDF</span>
-        </button>
-        <p class="setup-note" data-i18n="setupNote">PDF A4 · 3 cartelle per pagina. Il PDF si scarica subito; poi si gioca da qui.</p>
+        <div class="setup-submit" id="setup-submit">
+          <button class="btn-draw setup-download" type="submit" id="download-button">
+            <svg class="btn-draw__icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3.5" y="3.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <rect x="13.5" y="3.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <rect x="3.5" y="13.5" width="7" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <rect x="13.5" y="13.5" width="7" height="7" rx="1.6" fill="currentColor"/>
+            </svg>
+            <span data-i18n="generate">Genera le cartelle</span>
+          </button>
+          <p class="setup-note" data-i18n="setupNote">PDF A4 · 3 cartelle per pagina. La generazione può richiedere qualche secondo.</p>
+        </div>
+
+        <div class="setup-progress" id="setup-progress" role="status" hidden>
+          <span class="setup-spinner" aria-hidden="true"></span>
+          <p class="setup-progress__text" id="setup-progress-text"></p>
+        </div>
+
+        <div class="setup-ready" id="setup-ready" hidden>
+          <p class="setup-ready__title" id="setup-ready-title"></p>
+          <button class="btn-draw" type="button" id="start-button">
+            <svg class="btn-draw__icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3.5v11M7.5 10.5 12 15l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4.5 17.5v1.2a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-1.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <span data-i18n="download">Scarica il PDF</span>
+          </button>
+          <p class="setup-note" data-i18n="readyNote">Scarica il PDF e stampalo. Poi chiama i numeri da qui.</p>
+          <button class="text-button setup-change" type="button" id="change-count" data-i18n="changeCount">Cambia numero</button>
+        </div>
         <p class="field-error setup-error" id="setup-error" role="alert" hidden></p>
       </form>
     </section>
@@ -261,6 +283,19 @@
     </div>
 
     <div class="cards-grid" id="cards-grid" role="group" aria-label="Scegli le cartelle attive" data-i18n-aria="cardsGridLabel"></div>
+    <nav class="cards-pager" id="cards-pager" aria-label="Pagine delle cartelle" data-i18n-aria="pages" hidden>
+      <button class="btn-secondary cards-pager__button" type="button" id="cards-prev" aria-label="Pagina precedente" data-i18n-aria="pagePrev" aria-controls="cards-grid">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M14.5 6 8.5 12l6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <p class="cards-pager__status" id="cards-page" aria-live="polite"></p>
+      <button class="btn-secondary cards-pager__button" type="button" id="cards-next" aria-label="Pagina successiva" data-i18n-aria="pageNext" aria-controls="cards-grid">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9.5 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </nav>
     <p class="cards-legend" data-i18n="cardsLegend">Piena: attiva. Tratteggiata: non distribuita.</p>
     <p class="field-error" id="cards-error" role="alert" hidden></p>
 
