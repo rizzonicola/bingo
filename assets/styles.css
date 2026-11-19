@@ -670,6 +670,65 @@ kbd {
 }
 .history__saved .icon { color: var(--accent); }
 
+/* Crawlable page summary */
+.about {
+  max-width: 80ch;
+  padding-top: 4px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.about h2 {
+  margin-bottom: 6px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -.02em;
+}
+.about p + p { margin-top: 8px; }
+.about a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 404 */
+.notfound {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  max-width: 56ch;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 32px clamp(16px, 3.6vw, 48px);
+}
+.notfound__code {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+.notfound h1 {
+  font-size: clamp(30px, 5vw, 44px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+}
+.notfound p {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.notfound a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* Footer */
 .foot {
   display: flex;

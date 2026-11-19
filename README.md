@@ -36,7 +36,7 @@ Poi visita `http://localhost:4173`. La modalità cartelle è su `cards.html`; il
 
 ### Comune
 
-- Lingua: sistema, italiano, inglese, francese.
+- Lingua: italiano (predefinito), sistema, inglese, francese.
 - Colore: sistema, chiaro, scuro, Natale, Crema, Rosso. Le tre varianti natalizie aggiungono pino, oro, crema, rosso e piccoli dettagli illustrati, senza cambiare gerarchia né struttura.
 - Funziona senza build, senza framework e senza dipendenze esterne. Il font Gabarito è self-hosted con licenza OFL.
 
@@ -63,9 +63,13 @@ assets/fonts/         Gabarito (woff2) e licenza
 assets/privacy.js     selezione della lingua nell'informativa privacy
 tests/                test Node dei moduli puri
 favicon.svg
+assets/og-image.png   anteprima social 1200×630
 privacy.html          informativa privacy in italiano, inglese e francese
+404.html              pagina non trovata
+robots.txt            regole per i crawler
+sitemap.xml           URL pubblici del sito
 LICENSE               GNU GPL v3
-_redirects            vecchio indirizzo /cartelle reindirizzato a /cards
+_redirects            URL duplicati e vecchio /cartelle reindirizzati
 PRODUCT.md            verità di prodotto e assunzioni
 DESIGN.md             sistema visivo e regole di interfaccia
 ```

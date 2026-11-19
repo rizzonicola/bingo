@@ -44,7 +44,7 @@ Nessuna registrazione, nessun contorno da sala da gioco: due schermate pulite, p
 - Riaprire una cartella non ripete i premi già passati: la sincronizzazione è silenziosa. "Nuove cartelle" azzera la partita e torna ai valori iniziali.
 - Stato della partita e preferenze salvati in `localStorage`, con degradazione silenziosa se lo storage non è disponibile. La partita delle cartelle usa una chiave separata da quella del tabellone.
 - Nessun cookie proprio, analytics, tracker o chiamata di rete dell'app; l'informativa privacy è in `privacy.html` e descrive anche il trattamento tecnico dell'hosting Cloudflare Pages.
-- Lingua: sistema (predefinita), italiano, inglese, francese. Con "sistema" la lingua segue quella del browser; se non è una delle tre, si usa l'inglese.
+- Lingua: italiano (predefinito), sistema, inglese, francese. Con "sistema" la lingua segue quella del browser; se non è una delle tre, si usa l'inglese.
 - Nomi napoletani: interruttore nelle impostazioni, spento di default. Quando è acceso, il nome tradizionale compare sotto l'ultimo numero e nelle etichette di tabellone e cronologia.
 - Colore: sistema (predefinito), chiaro, scuro, Natale, Crema, Rosso. Con "sistema" il tema segue `prefers-color-scheme`; le tre varianti natalizie sono temi dedicati e restano stabili al cambio di tema di sistema.
 - Il tabellone principale non emette verdetti: i premi appartengono solo alla modalità cartelle. Suoni, account, multiplayer e cartelle digitali da giocare sullo schermo non fanno parte di questa versione.

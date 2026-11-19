@@ -57,7 +57,7 @@
   function loadPrefs() {
     const stored = readStored(PREFS_KEY, {}) || {};
     return {
-      lang: ['system', ...LANGUAGES].includes(stored.lang) ? stored.lang : 'system',
+      lang: ['system', ...LANGUAGES].includes(stored.lang) ? stored.lang : 'it',
       theme: THEMES.includes(stored.theme) ? stored.theme : 'system',
       names: stored.names === true,
     };
@@ -86,7 +86,11 @@
   function applyLanguage({ prefs, systemLang, copy, detectedLanguage }) {
     const lang = prefs.lang === 'system' ? systemLang : prefs.lang;
     const dict = copy[lang];
-    document.documentElement.lang = lang;
+    // The page is Italian; only the translated interface changes language.
+    document.documentElement.lang = 'it';
+    document.querySelectorAll('.app, dialog, .skip-link, #live-region, .noscript').forEach(element => {
+      element.lang = lang;
+    });
 
     document.querySelectorAll('[data-i18n]').forEach(element => {
       const value = dict[element.dataset.i18n];
@@ -98,10 +102,12 @@
     });
 
     if (detectedLanguage) detectedLanguage.textContent = LANGUAGE_NAMES[systemLang];
-    document.title = dict.docTitle;
-    setMeta('meta[name="description"]', dict.docDescription);
-    setMeta('meta[property="og:title"]', dict.ogTitle);
-    setMeta('meta[property="og:description"]', dict.ogDescription);
+    // Keep the crawlable Italian metadata unless the visitor picked a language.
+    const metaDict = prefs.lang === 'system' ? copy.it : dict;
+    document.title = metaDict.docTitle;
+    setMeta('meta[name="description"]', metaDict.docDescription);
+    setMeta('meta[property="og:title"]', metaDict.ogTitle);
+    setMeta('meta[property="og:description"]', metaDict.ogDescription);
     return lang;
   }
 

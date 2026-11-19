@@ -15,9 +15,9 @@
   const COPY = {
     it: {
       ...BINGO_COPY.it,
-      docTitle: 'Privacy · Bingo',
+      docTitle: 'Privacy e cookie · Bingo',
       docDescription: 'Informativa privacy di Bingo: nessun account, nessun tracker, dati di gioco solo nel browser.',
-      ogTitle: 'Privacy · Bingo',
+      ogTitle: 'Privacy e cookie · Bingo',
       ogDescription: 'Informativa privacy di Bingo: nessun account, nessun tracker, dati di gioco solo nel browser.',
       privacySkip: 'Vai al contenuto',
       privacyTitle: 'Informativa sulla privacy',
