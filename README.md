@@ -10,7 +10,7 @@ Apri `index.html` in un browser, oppure servi la cartella con un server statico:
 python3 -m http.server 4173
 ```
 
-Poi visita `http://localhost:4173`. La modalità cartelle è su `cartelle.html`; il link nella barra superiore passa dall'una all'altra.
+Poi visita `http://localhost:4173`. La modalità cartelle è su `cards.html`; il link nella barra superiore passa dall'una all'altra.
 
 ## Cosa fa
 
@@ -46,7 +46,7 @@ I suoni, gli account, il multiplayer e le cartelle digitali da giocare sullo sch
 
 ```
 index.html            tabellone
-cartelle.html         modalità cartelle: setup, PDF, partita e premi
+cards.html            modalità cartelle: setup, PDF, partita e premi
 assets/styles.css     token dei temi e stili condivisi
 assets/cartelle.css   layout della modalità cartelle
 assets/copy.js        testi condivisi tra tabellone e cartelle
@@ -65,6 +65,7 @@ tests/                test Node dei moduli puri
 favicon.svg
 privacy.html          informativa privacy in italiano, inglese e francese
 LICENSE               GNU GPL v3
+_redirects            vecchio indirizzo /cartelle reindirizzato a /cards
 PRODUCT.md            verità di prodotto e assunzioni
 DESIGN.md             sistema visivo e regole di interfaccia
 ```
