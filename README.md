@@ -1,5 +1,7 @@
 # Bingo
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 Tabellone digitale da 1 a 90 per una serata di bingo in famiglia o con amici. Estrae un numero alla volta, tiene l'ultimo in grande e mostra sempre tutti i numeri già usciti. La modalità Cartelle aggiunge cartelle numerate da stampare e il conteggio dei premi sulle cartelle attive.
 
 Apri `index.html` in un browser, oppure servi la cartella con un server statico:
@@ -58,8 +60,11 @@ assets/cards.js       generazione, validazione e intervalli delle cartelle
 assets/prizes.js      soglie dei premi e sincronizzazione silenziosa
 assets/pdf.js         palette di stampa e scrittore PDF A4
 assets/fonts/         Gabarito (woff2) e licenza
+assets/privacy.js     selezione della lingua nell'informativa privacy
 tests/                test Node dei moduli puri
 favicon.svg
+privacy.html          informativa privacy in italiano, inglese e francese
+LICENSE               GNU GPL v3
 PRODUCT.md            verità di prodotto e assunzioni
 DESIGN.md             sistema visivo e regole di interfaccia
 ```
@@ -75,3 +80,19 @@ node --test tests/*.test.mjs
 ```
 
 Le prove nel browser usano una pagina servita da HTTP, non `file://`, per poter leggere e scrivere `localStorage`.
+
+## Progetto e dipendenze
+
+[![GitHub](https://img.shields.io/badge/GitHub-rizzonicola%2Fbingo-181717?logo=github&logoColor=white)](https://github.com/rizzonicola/bingo)
+
+Il codice è su GitHub: <https://github.com/rizzonicola/bingo>.
+
+Non ci sono dipendenze runtime, build o CDN: HTML, CSS e JavaScript classici vengono serviti così come sono. Il font Gabarito è self-hosted in `assets/fonts/` con licenza SIL Open Font License 1.1 (`assets/fonts/OFL.txt`) e resta fuori dal codice GPL. I test usano solo il runner integrato di Node.js. Il sito è pubblicato come sito statico su Cloudflare Pages.
+
+## Privacy e licenza
+
+La pagina `privacy.html` spiega in italiano, inglese e francese quali dati restano nel browser e quale trattamento tecnico può svolgere Cloudflare Pages. Il sito non usa cookie propri, analytics o tracker e non richiede un banner di consenso.
+
+Il codice è distribuito con GNU General Public License v3.0: vedi `LICENSE`. La licenza non copre il font Gabarito, che resta sotto OFL 1.1.
+
+Questa documentazione legale è scritta in modo pratico e non sostituisce il parere di un avvocato: se il progetto diventa commerciale o cambia il trattamento dei dati, va rivista.

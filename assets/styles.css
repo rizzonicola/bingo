@@ -673,16 +673,104 @@ kbd {
 /* Footer */
 .foot {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 8px 16px;
   min-height: 28px;
   color: var(--muted);
   font-size: 12.5px;
 }
 .foot__brand { color: var(--ink); font-weight: 700; letter-spacing: -.02em; }
 .foot__sep { padding: 0 2px; }
+.foot__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+}
+.foot__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 28px;
+  text-decoration: none;
+}
+.foot__links a:hover,
+.foot__links a:focus-visible {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.foot__links .icon { width: 14px; height: 14px; }
 .shortcut { display: flex; align-items: center; gap: 6px; }
+
+/* Legal page */
+.legal-main {
+  flex: 1;
+  width: 100%;
+  max-width: 78ch;
+  margin: 0 auto;
+}
+.legal-head__meta {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.legal-lang {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.legal-lang a { color: var(--muted); }
+.legal-lang a[aria-current="true"] {
+  color: var(--ink);
+  text-decoration: none;
+}
+.legal {
+  margin-top: 18px;
+  padding: clamp(20px, 3vw, 34px);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+}
+.legal h2 {
+  margin-top: 26px;
+  font-size: clamp(18px, 1.6vw, 21px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+}
+.legal h2:first-child { margin-top: 0; }
+.legal p,
+.legal li {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+.legal ul {
+  margin: 10px 0 0;
+  padding-left: 20px;
+}
+.legal li { margin-top: 4px; }
+.legal code {
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface-2);
+  color: var(--ink);
+  font-size: .9em;
+}
+.legal a {
+  color: var(--accent-strong);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
 /* Dialogs */
 dialog {

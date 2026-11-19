@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="it" class="no-js" data-type="software" data-radius="soft" data-buttons="solid">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy · Bingo</title>
+<meta name="description" content="Informativa privacy di Bingo: nessun account, nessun tracker, dati di gioco solo nel browser.">
+<meta name="page-type" content="software">
+<meta name="site-kind" content="software">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#121617" id="theme-color">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Privacy · Bingo">
+<meta property="og:description" content="Informativa privacy di Bingo: nessun account, nessun tracker, dati di gioco solo nel browser.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preload" href="assets/fonts/gabarito-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/styles.css">
+<script>
+  (() => {
+    const root = document.documentElement;
+    root.classList.replace('no-js', 'js');
+    let prefs = {};
+    try { prefs = JSON.parse(localStorage.getItem('tombola.prefs.v1') || '{}') || {}; } catch (error) {}
+    const colors = {
+      light: '#e8ece7',
+      dark: '#121617',
+      christmas: '#0c1711',
+      'christmas-light': '#f1e8d8',
+      'christmas-red': '#1b0c0d',
+    };
+    const theme = Object.hasOwn(colors, prefs.theme)
+      ? prefs.theme
+      : (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    root.dataset.theme = theme;
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.content = colors[theme];
+  })();
+</script>
+<script src="assets/copy.js" defer></script>
+<script src="assets/common.js" defer></script>
+<script src="assets/privacy.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main" data-i18n="privacySkip">Vai al contenuto</a>
+
+<div class="app">
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Bingo">
+      <span class="brand__mark" aria-hidden="true">
+        <svg class="brand__glyph" viewBox="0 0 256 256" focusable="false">
+          <g fill="currentColor">
+            <rect x="30" y="30" width="80" height="80" rx="21"/>
+            <rect x="130" y="30" width="80" height="80" rx="21"/>
+            <rect x="30" y="130" width="80" height="80" rx="21"/>
+            <circle cx="178" cy="178" r="48"/>
+          </g>
+        </svg>
+        <svg class="brand__hat" viewBox="0 0 48 40" focusable="false">
+          <path d="M7 31C5 19 13 7 25 5c7-1.2 12 1 15 5 2 2.8 1.5 6-1 7.5-2.5 1.5-5.5.5-7-2-2.2-3.7-6.2-5-10.5-4-6.5 1.5-10 8.5-9 18.5Z" fill="#c7352c" stroke="#f8f3e7" stroke-width="2.5" stroke-linejoin="round"/>
+          <rect x="4" y="29" width="36" height="9" rx="4.5" fill="#f8f3e7"/>
+          <circle cx="43" cy="9" r="5" fill="#f8f3e7"/>
+        </svg>
+      </span>
+      <span class="brand__word">bingo</span>
+    </a>
+    <div class="topbar__actions">
+      <a class="mode-link" href="./" data-i18n-aria="backToBingo">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3.5" y="3.5" width="17" height="17" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M9.2 3.5v17M14.8 3.5v17M3.5 9.2h17M3.5 14.8h17" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        </svg>
+        <span data-i18n="board">Tabellone</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="legal-main" id="main">
+    <header class="page-head">
+      <div class="page-head__copy">
+        <h1 data-i18n="privacyTitle">Informativa sulla privacy</h1>
+        <p class="page-head__intro" data-i18n="privacyIntro">Cosa fa e cosa non fa il sito con i tuoi dati.</p>
+        <p class="legal-head__meta" data-i18n="privacyUpdated">Ultimo aggiornamento: 19 novembre 2026.</p>
+        <nav class="legal-lang" aria-label="Lingua dell'informativa" data-i18n-aria="privacyLang">
+          <a href="#privacy-it" data-lang-switch="it" lang="it">Italiano</a>
+          <a href="#privacy-en" data-lang-switch="en" lang="en">English</a>
+          <a href="#privacy-fr" data-lang-switch="fr" lang="fr">Français</a>
+        </nav>
+      </div>
+    </header>
+
+    <article class="legal" id="privacy-it" data-lang="it" lang="it" tabindex="-1">
+      <h2>In breve</h2>
+      <p>Bingo è un sito statico e open source. Non usiamo account, strumenti di analisi del traffico, pubblicità, tracker o profilazione. I dati della partita e le preferenze restano nel browser del dispositivo e non vengono inviati a nessun server.</p>
+
+      <h2>Titolare del trattamento</h2>
+      <p>Il titolare del trattamento è il gestore del sito, un progetto personale open source. Puoi contattarlo tramite il <a href="https://github.com/rizzonicola/bingo">repository GitHub del progetto</a>.</p>
+
+      <h2>Dati salvati sul dispositivo</h2>
+      <p>Il sito usa la memoria locale del browser (<code>localStorage</code>) per conservare:</p>
+      <ul>
+        <li><code>tombola.state.v1</code>: numeri estratti, premi e stato del tabellone;</li>
+        <li><code>bingo.cards.v1</code>: cartelle generate, cartelle disattivate e premi della modalità Cartelle;</li>
+        <li><code>tombola.prefs.v1</code>: lingua, tema e nomi napoletani.</li>
+      </ul>
+      <p>Questi dati restano sul dispositivo e non vengono trasmessi. Puoi cancellarli dalle impostazioni del browser; i pulsanti “Ricomincia” e “Nuove cartelle” azzerano la partita, ma non le preferenze. La cancellazione dei dati del sito elimina anche le partite salvate.</p>
+
+      <h2>Hosting e dati tecnici</h2>
+      <p>Il sito è pubblicato su Cloudflare Pages. Come ogni servizio di hosting, Cloudflare può trattare dati tecnici di connessione — ad esempio indirizzo IP, user agent, URL richiesto, data e ora — per consegnare le pagine e proteggere il servizio da abusi. Il trattamento è descritto nell'<a href="https://www.cloudflare.com/privacypolicy/">informativa privacy di Cloudflare</a>. Il sito non gestisce un proprio archivio di questi dati e non li usa per analisi o marketing.</p>
+
+      <h2>Cookie e consenso</h2>
+      <p>Il codice del sito non imposta cookie propri, non usa cookie di profilazione e non include tracker. La memoria locale serve solo a far funzionare il gioco e a ricordare le preferenze: è uno storage tecnico necessario al servizio richiesto, quindi non richiede un banner di consenso. L'hosting può impostare cookie tecnici strettamente necessari alla sicurezza. Puoi comunque svuotare la memoria locale dalle impostazioni del browser.</p>
+
+      <h2>Base giuridica e conservazione</h2>
+      <p>Il trattamento tecnico effettuato dall'hosting si fonda sull'interesse legittimo a fornire il sito in modo sicuro ed efficiente (art. 6, par. 1, lett. f, del GDPR). I dati nel browser restano sul dispositivo finché non li cancelli; non c'è un termine di conservazione lato server perché i dati di gioco non vengono ricevuti. Cloudflare applica i propri tempi di conservazione, descritti nella sua informativa.</p>
+
+      <h2>I tuoi diritti</h2>
+      <p>Puoi esercitare i diritti di accesso, rettifica, cancellazione, limitazione, opposizione e portabilità previsti dagli articoli 15–20 del GDPR, e proporre reclamo al <a href="https://www.garanteprivacy.it/">Garante per la protezione dei dati personali</a>. Poiché i dati di gioco restano nel browser, di norma basta cancellare i dati del sito. Per i dati tecnici trattati dall'hosting, contatta il gestore tramite il repository GitHub.</p>
+
+      <h2>Modifiche</h2>
+      <p>Questa informativa può essere aggiornata se cambiano il sito o i servizi usati. La data in cima indica l'ultima modifica.</p>
+    </article>
+
+    <article class="legal" id="privacy-en" data-lang="en" lang="en" tabindex="-1">
+      <h2>At a glance</h2>
+      <p>Bingo is a static, open-source site. We do not use accounts, traffic analytics, advertising, trackers, or profiling. Game data and preferences stay in the device's browser and are not sent to any server.</p>
+
+      <h2>Data controller</h2>
+      <p>The data controller is the site operator, a personal open-source project. You can contact the operator through the project's <a href="https://github.com/rizzonicola/bingo">GitHub repository</a>.</p>
+
+      <h2>Data stored on your device</h2>
+      <p>The site uses the browser's local storage (<code>localStorage</code>) to keep:</p>
+      <ul>
+        <li><code>tombola.state.v1</code>: drawn numbers, prizes, and board state;</li>
+        <li><code>bingo.cards.v1</code>: generated cards, disabled cards, and Cartelle prizes;</li>
+        <li><code>tombola.prefs.v1</code>: language, theme, and Neapolitan names.</li>
+      </ul>
+      <p>This data stays on the device and is not transmitted. You can delete it in your browser settings; the “Start over” and “New cards” buttons reset the game but not your preferences. Clearing the site's data also deletes saved games.</p>
+
+      <h2>Hosting and technical data</h2>
+      <p>The site is published on Cloudflare Pages. Like any hosting service, Cloudflare may process technical connection data — for example IP address, user agent, requested URL, date and time — to deliver pages and protect the service from abuse. This processing is described in <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>. The site keeps no archive of this data and does not use it for analytics or marketing.</p>
+
+      <h2>Cookies and consent</h2>
+      <p>The site's code sets no first-party cookies, uses no profiling cookies, and includes no trackers. Local storage is used only to run the game and remember preferences: it is technical storage necessary for the requested service, so it does not require a consent banner. The hosting provider may set technical cookies strictly necessary for security. You can still clear local storage in your browser settings.</p>
+
+      <h2>Legal basis and retention</h2>
+      <p>The technical processing performed by the hosting provider is based on the legitimate interest in providing the site securely and efficiently (Art. 6(1)(f) GDPR). Browser data stays on the device until you delete it; there is no server-side retention period because game data is not received. Cloudflare applies its own retention periods, described in its policy.</p>
+
+      <h2>Your rights</h2>
+      <p>You may exercise your rights of access, rectification, erasure, restriction, objection, and portability under Articles 15–20 GDPR, and lodge a complaint with the <a href="https://www.garanteprivacy.it/">Garante per la protezione dei dati personali</a> (Italian data protection authority). Since game data stays in the browser, deleting the site's data is usually enough. For technical data processed by the hosting provider, contact the operator through the GitHub repository.</p>
+
+      <h2>Changes</h2>
+      <p>This notice may be updated if the site or the services it uses change. The date at the top shows the last modification.</p>
+    </article>
+
+    <article class="legal" id="privacy-fr" data-lang="fr" lang="fr" tabindex="-1">
+      <h2>En bref</h2>
+      <p>Bingo est un site statique et open source. Nous n'utilisons ni compte, ni analyse d'audience, ni publicité, ni traceur, ni profilage. Les données de partie et les préférences restent dans le navigateur de l'appareil et ne sont envoyées à aucun serveur.</p>
+
+      <h2>Responsable du traitement</h2>
+      <p>Le responsable du traitement est l'éditeur du site, un projet personnel open source. Vous pouvez le contacter via le <a href="https://github.com/rizzonicola/bingo">dépôt GitHub du projet</a>.</p>
+
+      <h2>Données enregistrées sur l'appareil</h2>
+      <p>Le site utilise la mémoire locale du navigateur (<code>localStorage</code>) pour conserver :</p>
+      <ul>
+        <li><code>tombola.state.v1</code> : numéros tirés, prix et état du tableau ;</li>
+        <li><code>bingo.cards.v1</code> : cartes générées, cartes désactivées et prix du mode Cartes ;</li>
+        <li><code>tombola.prefs.v1</code> : langue, thème et noms napolitains.</li>
+      </ul>
+      <p>Ces données restent sur l'appareil et ne sont pas transmises. Vous pouvez les effacer dans les réglages du navigateur ; les boutons « Recommencer » et « Nouvelles cartes » remettent la partie à zéro, mais pas les préférences. Effacer les données du site supprime aussi les parties enregistrées.</p>
+
+      <h2>Hébergement et données techniques</h2>
+      <p>Le site est publié sur Cloudflare Pages. Comme tout service d'hébergement, Cloudflare peut traiter des données techniques de connexion — par exemple l'adresse IP, l'user agent, l'URL demandée, la date et l'heure — pour livrer les pages et protéger le service contre les abus. Ce traitement est décrit dans la <a href="https://www.cloudflare.com/privacypolicy/">politique de confidentialité de Cloudflare</a>. Le site ne tient pas son propre registre de ces données et ne les utilise ni pour l'analyse ni pour le marketing.</p>
+
+      <h2>Cookies et consentement</h2>
+      <p>Le code du site ne dépose pas de cookies propres, n'utilise pas de cookies de profilage et n'inclut pas de traceur. La mémoire locale sert uniquement au fonctionnement du jeu et au souvenir des préférences : c'est un stockage technique nécessaire au service demandé, qui ne requiert donc pas de bandeau de consentement. L'hébergeur peut déposer des cookies techniques strictement nécessaires à la sécurité. Vous pouvez la vider dans les réglages du navigateur.</p>
+
+      <h2>Base légale et conservation</h2>
+      <p>Le traitement technique effectué par l'hébergement repose sur l'intérêt légitime à fournir le site de manière sûre et efficace (art. 6, par. 1, point f, du RGPD). Les données du navigateur restent sur l'appareil jusqu'à leur suppression ; il n'existe pas de durée de conservation côté serveur, car les données de jeu ne sont pas reçues. Cloudflare applique ses propres durées de conservation, décrites dans sa politique.</p>
+
+      <h2>Vos droits</h2>
+      <p>Vous pouvez exercer vos droits d'accès, de rectification, d'effacement, de limitation, d'opposition et de portabilité prévus aux articles 15 à 20 du RGPD, et introduire une réclamation auprès du <a href="https://www.garanteprivacy.it/">Garante per la protezione dei dati personali</a> (autorité italienne). Comme les données de jeu restent dans le navigateur, effacer les données du site suffit généralement. Pour les données techniques traitées par l'hébergement, contactez l'éditeur via le dépôt GitHub.</p>
+
+      <h2>Modifications</h2>
+      <p>Cette politique peut être mise à jour si le site ou les services utilisés changent. La date en haut indique la dernière modification.</p>
+    </article>
+  </main>
+
+  <footer class="foot">
+    <p><span class="foot__brand">Bingo</span> <span class="foot__sep" aria-hidden="true">·</span> <span data-i18n="numbers">Numeri da 1 a 90</span></p>
+    <nav class="foot__links" aria-label="Informazioni sul progetto" data-i18n-aria="projectLinks">
+      <a href="privacy.html" data-i18n="privacy">Privacy</a>
+      <a href="https://github.com/rizzonicola/bingo" target="_blank" rel="noopener">
+        <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
+          <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+        </svg>
+        <span data-i18n="source">Codice</span>
+      </a>
+      <a href="https://github.com/rizzonicola/bingo/blob/main/LICENSE" target="_blank" rel="noopener" data-i18n="license">Licenza</a>
+    </nav>
+    <p class="shortcut"><kbd data-i18n="spaceKey">Spazio</kbd> <span data-i18n="shortcut">per estrarre</span></p>
+  </footer>
+</div>
+</body>
+</html>
